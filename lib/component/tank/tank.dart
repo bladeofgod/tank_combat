@@ -42,9 +42,9 @@ class Tank extends BaseComponent{
   @override
   void update(double t) {
     //时间增量t 旋转速率
-//    rotateBody(t);
-//    rotateTurret(t);
-//    moveTank(t);
+    rotateBody(t);
+    rotateTurret(t);
+    moveTank(t);
   }
 
   final Paint lightPaint = Paint()..color = Color(0xffdddddd);
@@ -164,6 +164,27 @@ class Tank extends BaseComponent{
         position = position + Offset.fromDirection(bodyAngle,50*t);
       }
     }
+  }
+
+
+  ///获取炮弹发射位置
+  Offset getBulletOffset() {
+    return position +
+        Offset.fromDirection(
+          getBulletAngle(),
+          36,
+        );
+  }
+
+  double getBulletAngle() {
+    double bulletAngle = bodyAngle + turretAngle;
+    while (bulletAngle > pi) {
+      bulletAngle -= pi * 2;
+    }
+    while (bulletAngle < -pi) {
+      bulletAngle += pi * 2;
+    }
+    return bulletAngle;
   }
 
 }
