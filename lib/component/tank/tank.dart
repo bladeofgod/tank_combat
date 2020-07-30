@@ -30,6 +30,7 @@ class Tank extends BaseComponent{
   //tank是否存活
   bool isDead = false;
 
+  final double ration = 0.7;
 
 
   @override
@@ -57,27 +58,27 @@ class Tank extends BaseComponent{
     canvas.rotate(bodyAngle);
 
     //绘制tank身体
-    canvas.drawRect(Rect.fromLTWH(-20, -15, 40, 30), lightPaint);
+    canvas.drawRect(Rect.fromLTWH(-20*ration, -15*ration, 40*ration, 30*ration), lightPaint);
 
     //绘制轮子
-    canvas.drawRect(Rect.fromLTWH(-24, -23, 48, 8), darkPaint);
+    canvas.drawRect(Rect.fromLTWH(-24*ration, -23*ration, 48*ration, 8*ration), darkPaint);
     canvas.drawRect(
-      Rect.fromLTWH(-24, 15, 48, 8),
+      Rect.fromLTWH(-24*ration, 15*ration, 48*ration, 8*ration),
       darkPaint,
     );
     //旋转炮台
     canvas.rotate(turretAngle);
     // 绘制炮塔
     canvas.drawRect(
-      Rect.fromLTWH(-10, -12, 25, 24),
+      Rect.fromLTWH(-10*ration, -12*ration, 25*ration, 24*ration),
       darkPaint,
     );
     canvas.drawRect(
-      Rect.fromLTWH(0, -3, 36, 6),
+      Rect.fromLTWH(0, -3*ration, 36*ration, 6*ration),
       darkPaint,
     );
     canvas.drawRect(
-      Rect.fromLTWH(36, -5, 6, 10),
+      Rect.fromLTWH(36*ration, -5*ration, 6*ration, 10*ration),
       darkPaint,
     );
     canvas.restore();
