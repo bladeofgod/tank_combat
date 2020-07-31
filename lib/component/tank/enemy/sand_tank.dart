@@ -1,6 +1,6 @@
 /*
 * Author : LiJiqqi
-* Date : 2020/7/30
+* Date : 2020/7/31
 */
 
 import 'dart:math';
@@ -8,55 +8,22 @@ import 'dart:ui';
 
 import 'package:flame/sprite.dart';
 import 'package:tankcombat/component/base_component.dart';
+import 'package:tankcombat/component/tank/enemy/tank_model.dart';
 import 'package:tankcombat/game/tank_game.dart';
 
-class Tank extends BaseComponent{
+class SandTank extends TankModel with BaseComponent{
 
-  final TankGame game;
-  Sprite bodySprite,turretSprite;
-
-  Tank(this.game,{this.position}){
-    turretSprite = Sprite('tank/t_turret_blue.webp');
-
-     bodySprite= Sprite('tank/t_body_blue.webp');
-
-  }
-
-
-  //出生位置
-  Offset position;
-  //车体角度
-  double bodyAngle = 0;
-  //炮塔角度
-  double turretAngle = 0;
-
-  //车体目标角度
-  double targetBodyAngle;
-  //炮塔目标角度
-  double targetTurretAngle;
-
-  //tank是否存活
-  bool isDead = false;
-
-  final double ration = 0.7;
-
+  SandTank(TankGame game, Sprite bodySprite, Sprite turretSprite) : super(game, bodySprite, turretSprite);
 
   @override
   void render(Canvas canvas) {
-    if(isDead) return;
-    drawBody(canvas);
+    // TODO: implement render
   }
-
 
   @override
   void update(double t) {
-    //时间增量t 旋转速率
-    rotateBody(t);
-    rotateTurret(t);
-    moveTank(t);
+    // TODO: implement update
   }
-
-
 
   void drawBody(Canvas canvas) {
     //将canvas 原点设置在tank上
@@ -181,7 +148,6 @@ class Tank extends BaseComponent{
   }
 
 }
-
 
 
 

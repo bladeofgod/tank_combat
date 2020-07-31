@@ -8,6 +8,8 @@ import 'dart:ui';
 import 'package:flame/game.dart';
 import 'package:tankcombat/component/background/background.dart';
 import 'package:tankcombat/component/tank/bullet.dart';
+import 'package:tankcombat/component/tank/enemy/green_tank.dart';
+import 'package:tankcombat/component/tank/enemy/sand_tank.dart';
 import 'package:tankcombat/component/tank/tank.dart';
 
 class TankGame extends Game{
@@ -15,10 +17,21 @@ class TankGame extends Game{
 
   BattleBackground bg;
 
+  //玩家
   Tank tank;
 
   //炮弹
   List<Bullet> bullets;
+
+  //敌方tank
+  //分开，也许需要特殊处理
+  List<GreenTank> gTanks = [];
+  List<SandTank> sTanks = [];
+
+
+  TankGame(){
+
+  }
 
   @override
   void render(Canvas canvas) {
