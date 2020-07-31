@@ -74,7 +74,9 @@ void main() async{
 
 void loadAssets(){
   Flame.images.loadAll([
-    'new_map.webp'
+    'new_map.webp',
+    'tank/t_body_blue.webp',
+    'tank/t_turret_blue.webp'
   ]);
 }
 

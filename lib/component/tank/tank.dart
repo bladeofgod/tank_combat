@@ -6,14 +6,22 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/sprite.dart';
 import 'package:tankcombat/component/base_component.dart';
 import 'package:tankcombat/game/tank_game.dart';
 
 class Tank extends BaseComponent{
 
   final TankGame game;
+  Sprite bodySprite,turretSprite;
 
-  Tank(this.game,{this.position});
+  Tank(this.game,{this.position}){
+    turretSprite = Sprite('tank/t_turret_blue.webp');
+
+     bodySprite= Sprite('tank/t_body_blue.webp');
+
+  }
+
 
   //出生位置
   Offset position;
@@ -48,8 +56,7 @@ class Tank extends BaseComponent{
     moveTank(t);
   }
 
-  final Paint lightPaint = Paint()..color = Color(0xffdddddd);
-  final Paint darkPaint = Paint()..color = Color(0xff777777);
+
 
   void drawBody(Canvas canvas) {
     //将canvas 原点设置在tank上
@@ -58,29 +65,14 @@ class Tank extends BaseComponent{
     canvas.rotate(bodyAngle);
 
     //绘制tank身体
-    canvas.drawRect(Rect.fromLTWH(-20*ration, -15*ration, 40*ration, 30*ration), lightPaint);
 
-    //绘制轮子
-    canvas.drawRect(Rect.fromLTWH(-24*ration, -23*ration, 48*ration, 8*ration), darkPaint);
-    canvas.drawRect(
-      Rect.fromLTWH(-24*ration, 15*ration, 48*ration, 8*ration),
-      darkPaint,
-    );
+    bodySprite.renderRect(canvas,Rect.fromLTWH(-20*ration, -15*ration, 38*ration, 32*ration));
+
     //旋转炮台
     canvas.rotate(turretAngle);
     // 绘制炮塔
-    canvas.drawRect(
-      Rect.fromLTWH(-10*ration, -12*ration, 25*ration, 24*ration),
-      darkPaint,
-    );
-    canvas.drawRect(
-      Rect.fromLTWH(0, -3*ration, 36*ration, 6*ration),
-      darkPaint,
-    );
-    canvas.drawRect(
-      Rect.fromLTWH(36*ration, -5*ration, 6*ration, 10*ration),
-      darkPaint,
-    );
+    turretSprite.renderRect(canvas, Rect.fromLTWH(-1, -2*ration, 22*ration, 6*ration));
+
     canvas.restore();
 
   }
