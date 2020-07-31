@@ -31,7 +31,7 @@ class SandTank extends TankModel with BaseComponent{
     double y = Random().nextDouble() * (game.screenSize.height - (seedNum * seedRatio));
 
     targetOffset = Offset(x,y);
-    debugPrint('target offset $targetOffset');
+
     Offset temp = targetOffset - position;
     targetBodyAngle = temp.direction;
     targetTurretAngle = temp.direction;

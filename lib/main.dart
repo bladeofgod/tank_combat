@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,14 +13,30 @@ void main() async{
 
   loadAssets();
 
-  ///设置横屏
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeRight,
-    DeviceOrientation.landscapeLeft
-  ]);
 
-  ///全面屏
-  await SystemChrome.setEnabledSystemUIOverlays([]);
+  bool isWeb = false;
+  try{
+    if(Platform.isAndroid || Platform.isIOS){
+      isWeb = false;
+    }else{
+      isWeb = true;
+    }
+  }catch(e){
+    isWeb = true;
+  }
+
+  if(! isWeb){
+    ///设置横屏
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft
+    ]);
+
+    ///全面屏
+    await SystemChrome.setEnabledSystemUIOverlays([]);
+  }
+
+
 
   final TankGame tankGame = TankGame();
 
