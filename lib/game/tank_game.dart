@@ -11,6 +11,7 @@ import 'package:tankcombat/component/tank/bullet.dart';
 import 'package:tankcombat/component/tank/enemy/green_tank.dart';
 import 'package:tankcombat/component/tank/enemy/sand_tank.dart';
 import 'package:tankcombat/component/tank/tank.dart';
+import 'package:tankcombat/observer/game_observer.dart';
 
 class TankGame extends Game{
   Size screenSize;
@@ -28,9 +29,10 @@ class TankGame extends Game{
   List<GreenTank> gTanks = [];
   List<SandTank> sTanks = [];
 
+  GameObserver observer;
 
   TankGame(){
-
+    observer = GameObserver(this);
   }
 
   @override
