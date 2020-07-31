@@ -11,6 +11,7 @@ import 'package:tankcombat/component/background/background.dart';
 import 'package:tankcombat/component/tank/bullet.dart';
 import 'package:tankcombat/component/tank/enemy/green_tank.dart';
 import 'package:tankcombat/component/tank/enemy/sand_tank.dart';
+import 'package:tankcombat/component/tank/enemy/tank_model.dart';
 import 'package:tankcombat/component/tank/tank.dart';
 import 'package:tankcombat/observer/game_observer.dart';
 
@@ -24,6 +25,13 @@ class TankGame extends Game{
 
   //炮弹
   List<Bullet> bullets;
+  //绿色炮弹数量
+  int greenBulletNum = 0;
+  //黄色炮弹数量
+  int sandBulletNum = 0;
+  //蓝色炮弹数量
+  int blueBulletNum = 0;
+
 
   //敌方tank
   //分开，也许需要特殊处理
@@ -67,7 +75,22 @@ class TankGame extends Game{
     sTanks.forEach((element) {
       element.update(t);
     });
+    blueBulletNum = 0;
+    greenBulletNum = 0;
+    sandBulletNum = 0;
     bullets.forEach((element) {
+      switch(element.bulletColor){
+
+        case BulletColor.BLUE:
+          blueBulletNum ++;
+          break;
+        case BulletColor.GREEN:
+          greenBulletNum ++;
+          break;
+        case BulletColor.SAND:
+          sandBulletNum ++;
+          break;
+      }
       element.update(t);
     });
     //移除飞出屏幕的
@@ -113,9 +136,18 @@ class TankGame extends Game{
   }
 
   void onFireButtonTap(){
-    bullets.add(Bullet(this,BulletColor.BLUE,position: tank.getBulletOffset(),angle: tank.getBulletAngle()));
+    if(blueBulletNum < 20){
+      bullets.add(Bullet(this,BulletColor.BLUE,position: tank.getBulletOffset(),angle: tank.getBulletAngle()));
+    }
+
   }
 
+  void enemyTankFire<T extends TankModel>(BulletColor color,T tankModel){
+    bullets.add(Bullet(this,color,position: tankModel.getBulletOffset(),angle: tankModel.getBulletAngle()));
+  }
+
+
+  ///初始化敌军
   void initEnemyTank() {
     var turretSprite = Sprite('tank/t_turret_green.webp');
     var bodySprite= Sprite('tank/t_body_green.webp');

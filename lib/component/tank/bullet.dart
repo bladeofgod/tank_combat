@@ -15,7 +15,7 @@ enum BulletColor{
 class Bullet extends BaseComponent{
 
   final TankGame game;
-  final double speed = 300;
+  final double speed;
   Offset position;
   double angle = 0;
   bool isOffScreen = false;
@@ -25,7 +25,7 @@ class Bullet extends BaseComponent{
                   sandSprite = Sprite('tank/bullet_green.webp');
   final BulletColor bulletColor;
 
-  Bullet(this.game,this.bulletColor,{this.position,this.angle});
+  Bullet(this.game,this.bulletColor,{this.position,this.angle,this.speed = 200});
 
   @override
   void render(Canvas canvas) {

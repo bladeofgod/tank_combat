@@ -45,6 +45,12 @@ abstract class TankModel{
   Offset targetOffset;
 
   final double ration = 0.7;
+
+
+  ///获取炮弹发射位置
+  Offset getBulletOffset() ;
+
+  double getBulletAngle();
 }
 
 

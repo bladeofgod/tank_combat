@@ -12,6 +12,8 @@ import 'package:tankcombat/component/base_component.dart';
 import 'package:tankcombat/component/tank/enemy/tank_model.dart';
 import 'package:tankcombat/game/tank_game.dart';
 
+import '../bullet.dart';
+
 class SandTank extends TankModel with BaseComponent{
 
   Rect bodyRect ;
@@ -47,6 +49,10 @@ class SandTank extends TankModel with BaseComponent{
     rotateBody(t);
     rotateTurret(t);
     moveTank(t);
+
+    if(game.sandBulletNum < 10){
+      game.enemyTankFire(BulletColor.SAND, this);
+    }
   }
 
   void drawBody(Canvas canvas) {

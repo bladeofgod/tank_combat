@@ -9,6 +9,7 @@ import 'dart:ui';
 import 'package:flame/sprite.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:tankcombat/component/base_component.dart';
+import 'package:tankcombat/component/tank/bullet.dart';
 import 'package:tankcombat/component/tank/enemy/tank_model.dart';
 import 'package:tankcombat/game/tank_game.dart';
 
@@ -46,11 +47,20 @@ class GreenTank extends TankModel with BaseComponent{
     drawBody(canvas);
   }
 
+
+
   @override
   void update(double t) {
     rotateBody(t);
     rotateTurret(t);
     moveTank(t);
+
+
+
+    if(game.greenBulletNum < 10){
+      game.enemyTankFire(BulletColor.GREEN, this);
+    }
+
   }
 
 
