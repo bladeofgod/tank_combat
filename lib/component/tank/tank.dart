@@ -17,8 +17,7 @@ class Tank extends BaseComponent{
 
   Tank(this.game,{this.position}){
     turretSprite = Sprite('tank/t_turret_blue.webp');
-
-     bodySprite= Sprite('tank/t_body_blue.webp');
+    bodySprite= Sprite('tank/t_body_blue.webp');
 
   }
 

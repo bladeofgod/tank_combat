@@ -6,6 +6,7 @@
 import 'dart:ui';
 
 import 'package:flame/game.dart';
+import 'package:flame/sprite.dart';
 import 'package:tankcombat/component/background/background.dart';
 import 'package:tankcombat/component/tank/bullet.dart';
 import 'package:tankcombat/component/tank/enemy/green_tank.dart';
@@ -33,6 +34,7 @@ class TankGame extends Game{
 
   TankGame(){
     observer = GameObserver(this);
+    initEnemyTank();
   }
 
   @override
@@ -46,12 +48,25 @@ class TankGame extends Game{
     bullets.forEach((element) {
       element.render(canvas);
     });
+    //enemy
+    gTanks.forEach((element) {
+      element.render(canvas);
+    });
+    sTanks.forEach((element) {
+      element.render(canvas);
+    });
   }
 
   @override
   void update(double t) {
     if(screenSize == null)return;
     tank.update(t);
+    gTanks.forEach((element) {
+      element.update(t);
+    });
+    sTanks.forEach((element) {
+      element.update(t);
+    });
     bullets.forEach((element) {
       element.update(t);
     });
@@ -95,6 +110,24 @@ class TankGame extends Game{
   void onFireButtonTap(){
     bullets.add(Bullet(this,BulletColor.BLUE,position: tank.getBulletOffset(),angle: tank.getBulletAngle()));
   }
+
+  void initEnemyTank() {
+    var turretSprite = Sprite('tank/t_turret_green.webp');
+    var bodySprite= Sprite('tank/t_body_green.webp');
+    gTanks.add(GreenTank(this,bodySprite,turretSprite, Offset(100,100)));
+    gTanks.add(GreenTank(this,bodySprite,turretSprite, Offset(100,screenSize.height*0.8)));
+
+
+    ///sand
+    var turretSpriteS = Sprite('tank/t_turret_sand.webp');
+    var bodySpriteS = Sprite('tank/t_body_sand.webp');
+    sTanks.add( SandTank(this,turretSpriteS,bodySpriteS,
+        Offset(screenSize.width-100,100)));
+    sTanks.add( SandTank(this,turretSpriteS,bodySpriteS,
+            Offset(screenSize.width-100,screenSize.height*0.8)));
+  }
+
+
 
 }
 

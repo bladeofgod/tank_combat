@@ -14,7 +14,7 @@ abstract class TankModel{
   //出生位置
   Offset position;
 
-  TankModel(this.game,this.bodySprite,this.turretSprite,{this.position});
+  TankModel(this.game,this.bodySprite,this.turretSprite,this.position);
 
 
   //车体角度

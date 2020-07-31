@@ -13,16 +13,20 @@ import 'package:tankcombat/game/tank_game.dart';
 
 class SandTank extends TankModel with BaseComponent{
 
-  SandTank(TankGame game, Sprite bodySprite, Sprite turretSprite) : super(game, bodySprite, turretSprite);
+  SandTank(TankGame game, Sprite bodySprite, Sprite turretSprite,Offset position)
+      : super(game, bodySprite, turretSprite,position);
 
   @override
   void render(Canvas canvas) {
-    // TODO: implement render
+    if(isDead) return;
+    drawBody(canvas);
   }
 
   @override
   void update(double t) {
-    // TODO: implement update
+    rotateBody(t);
+    rotateTurret(t);
+    moveTank(t);
   }
 
   void drawBody(Canvas canvas) {

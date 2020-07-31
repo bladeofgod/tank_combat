@@ -12,16 +12,20 @@ import 'package:tankcombat/component/tank/enemy/tank_model.dart';
 import 'package:tankcombat/game/tank_game.dart';
 
 class GreenTank extends TankModel with BaseComponent{
-  GreenTank(TankGame game, Sprite bodySprite, Sprite turretSprite) : super(game, bodySprite, turretSprite);
+  GreenTank(TankGame game, Sprite bodySprite, Sprite turretSprite,Offset position)
+      : super(game, bodySprite, turretSprite,position);
 
   @override
   void render(Canvas canvas) {
-    // TODO: implement render
+    if(isDead) return;
+    drawBody(canvas);
   }
 
   @override
   void update(double t) {
-    // TODO: implement update
+    rotateBody(t);
+    rotateTurret(t);
+    moveTank(t);
   }
 
   void drawBody(Canvas canvas) {
