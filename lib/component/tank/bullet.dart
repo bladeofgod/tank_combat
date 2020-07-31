@@ -4,8 +4,13 @@
 */
 import 'dart:ui';
 
+import 'package:flame/sprite.dart';
 import 'package:tankcombat/component/base_component.dart';
 import 'package:tankcombat/game/tank_game.dart';
+
+enum BulletColor{
+  BLUE,GREEN,SAND
+}
 
 class Bullet extends BaseComponent{
 
@@ -15,7 +20,12 @@ class Bullet extends BaseComponent{
   double angle = 0;
   bool isOffScreen = false;
 
-  Bullet(this.game,{this.position,this.angle});
+  final Sprite blueSprite = Sprite('tank/bullet_blue.webp'),
+                greenSprite = Sprite('tank/bullet_green.webp'),
+                  sandSprite = Sprite('tank/bullet_green.webp');
+  final BulletColor bulletColor;
+
+  Bullet(this.game,this.bulletColor,{this.position,this.angle});
 
   @override
   void render(Canvas canvas) {
@@ -23,8 +33,20 @@ class Bullet extends BaseComponent{
     canvas.translate(position.dx, position.dy);
     canvas.rotate(angle);
 
-    canvas.drawRect(
-      Rect.fromLTWH(-10, -3, 16, 6), Paint()..color = Color(0xffff0000),);
+    switch(bulletColor){
+
+      case BulletColor.BLUE:
+        blueSprite.renderRect(canvas, Rect.fromLTWH(-4, -2, 8, 4));
+        break;
+      case BulletColor.GREEN:
+        greenSprite.renderRect(canvas, Rect.fromLTWH(-4, -2, 6, 4));
+        break;
+      case BulletColor.SAND:
+        sandSprite.renderRect(canvas, Rect.fromLTWH(-4, -2, 6, 4));
+        break;
+    }
+//    canvas.drawRect(
+//      Rect.fromLTWH(-10, -3, 16, 6), Paint()..color = Color(0xffff0000),);
     canvas.restore();
   }
 

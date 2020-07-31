@@ -76,7 +76,14 @@ void loadAssets(){
   Flame.images.loadAll([
     'new_map.webp',
     'tank/t_body_blue.webp',
-    'tank/t_turret_blue.webp'
+    'tank/t_turret_blue.webp',
+    'tank/t_body_green.webp',
+    'tank/t_turret_green.webp',
+    'tank/t_body_sand.webp',
+    'tank/t_turret_sand.webp',
+    'tank/bullet_blue.webp',
+    'tank/bullet_green.webp',
+    'tank/bullet_sand.webp',
   ]);
 }
 

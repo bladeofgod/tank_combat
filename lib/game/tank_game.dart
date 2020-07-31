@@ -78,7 +78,7 @@ class TankGame extends Game{
   }
 
   void onFireButtonTap(){
-    bullets.add(Bullet(this,position: tank.getBulletOffset(),angle: tank.getBulletAngle()));
+    bullets.add(Bullet(this,BulletColor.BLUE,position: tank.getBulletOffset(),angle: tank.getBulletAngle()));
   }
 
 }
