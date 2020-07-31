@@ -34,7 +34,7 @@ class TankGame extends Game{
 
   TankGame(){
     observer = GameObserver(this);
-    initEnemyTank();
+
   }
 
   @override
@@ -88,6 +88,7 @@ class TankGame extends Game{
     if(bullets == null){
       bullets = List();
     }
+    initEnemyTank();
 
   }
 
@@ -121,9 +122,9 @@ class TankGame extends Game{
     ///sand
     var turretSpriteS = Sprite('tank/t_turret_sand.webp');
     var bodySpriteS = Sprite('tank/t_body_sand.webp');
-    sTanks.add( SandTank(this,turretSpriteS,bodySpriteS,
+    sTanks.add( SandTank(this,bodySpriteS,turretSpriteS,
         Offset(screenSize.width-100,100)));
-    sTanks.add( SandTank(this,turretSpriteS,bodySpriteS,
+    sTanks.add( SandTank(this,bodySpriteS,turretSpriteS,
             Offset(screenSize.width-100,screenSize.height*0.8)));
   }
 
