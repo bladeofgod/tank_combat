@@ -7,6 +7,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/sprite.dart';
+import 'package:flutter/material.dart';
 import 'package:tankcombat/component/base_component.dart';
 import 'package:tankcombat/component/tank/enemy/tank_model.dart';
 import 'package:tankcombat/game/tank_game.dart';
@@ -20,6 +21,19 @@ class SandTank extends TankModel with BaseComponent{
       : super(game, bodySprite, turretSprite,position){
     bodyRect = Rect.fromLTWH(-20*ration, -15*ration, 38*ration, 32*ration);
     turretRect = Rect.fromLTWH(-1, -2*ration, 22*ration, 6*ration);
+    generateTargetOffset();
+  }
+
+  void generateTargetOffset(){
+    double x = Random().nextDouble() * (game.screenSize.width - (seedNum * seedRatio));
+    double y = Random().nextDouble() * (game.screenSize.height - (seedNum * seedRatio));
+
+    targetOffset = Offset(x,y);
+    debugPrint('target offset $targetOffset');
+    Offset temp = targetOffset - position;
+    targetBodyAngle = temp.direction;
+    targetTurretAngle = temp.direction;
+
   }
 
   @override
@@ -126,13 +140,26 @@ class SandTank extends TankModel with BaseComponent{
 
   void moveTank(double t) {
     if(targetBodyAngle != null){
-      if(bodyAngle == targetBodyAngle){
-        //tank 直线时 移动速度快
-        position = position + Offset.fromDirection(bodyAngle,100*t);//100 是像素
-      }else{
-        //tank旋转时 移动速度要慢
-        position = position + Offset.fromDirection(bodyAngle,50*t);
+      if(targetOffset != null){
+        movedDis += speed * t;
+        //Offset target = targetOffset - position;
+//        debugPrint('distance  ${target.distance}');
+//        debugPrint('s   $s');
+        if(movedDis < 100){
+          if(bodyAngle == targetBodyAngle){
+            //tank 直线时 移动速度快
+            position = position + Offset.fromDirection(bodyAngle,speed*t);//100 是像素
+          }else{
+            //tank旋转时 移动速度要慢
+            position = position + Offset.fromDirection(bodyAngle,turnSpeed*t);
+          }
+        }else{
+          movedDis = 0;
+          generateTargetOffset();
+
+        }
       }
+
     }
   }
 
