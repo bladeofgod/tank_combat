@@ -13,8 +13,14 @@ import 'package:tankcombat/game/tank_game.dart';
 
 class SandTank extends TankModel with BaseComponent{
 
+  Rect bodyRect ;
+  Rect turretRect;
+
   SandTank(TankGame game, Sprite bodySprite, Sprite turretSprite,Offset position)
-      : super(game, bodySprite, turretSprite,position);
+      : super(game, bodySprite, turretSprite,position){
+    bodyRect = Rect.fromLTWH(-20*ration, -15*ration, 38*ration, 32*ration);
+    turretRect = Rect.fromLTWH(-1, -2*ration, 22*ration, 6*ration);
+  }
 
   @override
   void render(Canvas canvas) {
@@ -37,12 +43,12 @@ class SandTank extends TankModel with BaseComponent{
 
     //绘制tank身体
 
-    bodySprite.renderRect(canvas,Rect.fromLTWH(-20*ration, -15*ration, 38*ration, 32*ration));
+    bodySprite.renderRect(canvas,bodyRect);
 
     //旋转炮台
     canvas.rotate(turretAngle);
     // 绘制炮塔
-    turretSprite.renderRect(canvas, Rect.fromLTWH(-1, -2*ration, 22*ration, 6*ration));
+    turretSprite.renderRect(canvas, turretRect);
 
     canvas.restore();
 

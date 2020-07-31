@@ -24,7 +24,7 @@ class GameObserver{
 
   bool isGenerating = false;
 
-  void watching(){
+  void watching(double t){
     if(!isGenerating){
       if(game.gTanks.length<2){
         isGenerating = true;
@@ -64,7 +64,11 @@ class GameObserver{
   }
 
   void coolDown(Function task) {
-    Future.delayed(Duration(milliseconds: 1500)).then((value) => task());
+    Future.delayed(Duration(milliseconds: 1500)).then((value) {
+      if(task != null){
+        task();
+      }
+    });
   }
 
 

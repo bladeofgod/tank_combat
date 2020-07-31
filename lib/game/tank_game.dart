@@ -72,11 +72,15 @@ class TankGame extends Game{
     });
     //移除飞出屏幕的
     bullets.removeWhere((element) => element.isOffScreen);
+
+    observer.watching(t);
+
   }
 
   @override
   void resize(Size size) {
     screenSize = size;
+    //initEnemyTank();
     if(bg == null){
       bg = BattleBackground(this);
     }
@@ -88,7 +92,7 @@ class TankGame extends Game{
     if(bullets == null){
       bullets = List();
     }
-    initEnemyTank();
+
 
   }
 
