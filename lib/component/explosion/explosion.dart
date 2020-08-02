@@ -46,11 +46,13 @@ class OrangeExplosion extends BaseComponent{
   void update(double t) {
     if(playDone)return;
     if(playIndex<5){
-      //2秒 5张图片
+      //1秒 5张图片
       passedTime +=t;
       debugPrint('passed time :$passedTime');
-      playIndex = (passedTime % 0.4).toInt();
+      playIndex = passedTime ~/ 0.2;
       debugPrint('platy index $playIndex');
+    }else{
+      playDone = true;
     }
   }
 
