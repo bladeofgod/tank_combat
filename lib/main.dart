@@ -102,6 +102,11 @@ void loadAssets(){
     'tank/bullet_blue.webp',
     'tank/bullet_green.webp',
     'tank/bullet_sand.webp',
+    'explosion/explosion1.webp',
+    'explosion/explosion2.webp',
+    'explosion/explosion3.webp',
+    'explosion/explosion4.webp',
+    'explosion/explosion5.webp',
   ]);
 }
 

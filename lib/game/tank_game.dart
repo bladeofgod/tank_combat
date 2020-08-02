@@ -8,6 +8,7 @@ import 'dart:ui';
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 import 'package:tankcombat/component/background/background.dart';
+import 'package:tankcombat/component/explosion/explosion.dart';
 import 'package:tankcombat/component/tank/bullet.dart';
 import 'package:tankcombat/component/tank/enemy/green_tank.dart';
 import 'package:tankcombat/component/tank/enemy/sand_tank.dart';
@@ -38,6 +39,9 @@ class TankGame extends Game{
   List<GreenTank> gTanks = [];
   List<SandTank> sTanks = [];
 
+  //爆炸动画
+  List<OrangeExplosion> explosions = [];
+
   GameObserver observer;
 
   TankGame(){
@@ -63,6 +67,8 @@ class TankGame extends Game{
     sTanks.forEach((element) {
       element.render(canvas);
     });
+    //爆炸
+    explosions.forEach((element) {element.render(canvas);});
   }
 
   @override
@@ -98,6 +104,11 @@ class TankGame extends Game{
     //移除死亡tank
     gTanks.removeWhere((element) => element.isDead);
     sTanks.removeWhere((element) => element.isDead);
+
+    //移除爆炸
+    explosions.removeWhere((element) => element.playDone);
+    //爆炸
+    explosions.forEach((element) {element.update(t);});
 
     observer.watching(t);
 

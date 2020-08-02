@@ -8,6 +8,7 @@ import 'dart:math';
 import 'package:flame/sprite.dart';
 import 'package:flame/time.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:tankcombat/component/explosion/explosion.dart';
 import 'package:tankcombat/component/tank/bullet.dart';
 import 'package:tankcombat/component/tank/enemy/green_tank.dart';
 import 'package:tankcombat/component/tank/enemy/sand_tank.dart';
@@ -92,6 +93,8 @@ class GameObserver{
               //hit
               gt.isDead = true;
               bullet.isHit = true;
+              //添加爆炸
+              addExplosion(gt.position);
             }
           });
           game.sTanks.forEach((st) {
@@ -99,6 +102,7 @@ class GameObserver{
             if(zone.distance < hitDistance){
               st.isDead = true;
               bullet.isHit = true;
+              addExplosion(st.position);
             }
           });
           break;
@@ -113,6 +117,10 @@ class GameObserver{
           break;
       }
     });
+  }
+
+  void addExplosion(Offset position){
+    game.explosions.add(OrangeExplosion(game, position));
   }
 
 
