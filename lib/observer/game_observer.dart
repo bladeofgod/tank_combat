@@ -8,6 +8,7 @@ import 'dart:math';
 import 'package:flame/sprite.dart';
 import 'package:flame/time.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:tankcombat/component/tank/bullet.dart';
 import 'package:tankcombat/component/tank/enemy/green_tank.dart';
 import 'package:tankcombat/component/tank/enemy/sand_tank.dart';
 import 'package:tankcombat/game/tank_game.dart';
@@ -37,6 +38,8 @@ class GameObserver{
         return;
       }
     }
+    ///check hit
+    checkHit();
   }
 
 
@@ -67,6 +70,47 @@ class GameObserver{
     Future.delayed(Duration(milliseconds: 1500)).then((value) {
       if(task != null){
         task();
+      }
+    });
+  }
+
+
+
+  double hitDistance = 10;
+
+  ///检查是否有tank被击中
+  void checkHit() {
+    game.bullets.forEach((bullet) {
+      switch(bullet.bulletColor){
+        //玩家对敌军
+        case BulletColor.BLUE:
+          game.gTanks.forEach((gt) {
+
+            Offset zone =gt.position - bullet.position;
+
+            if(zone.distance < hitDistance){
+              //hit
+              gt.isDead = true;
+              bullet.isHit = true;
+            }
+          });
+          game.sTanks.forEach((st) {
+            Offset zone =st.position - bullet.position;
+            if(zone.distance < hitDistance){
+              st.isDead = true;
+              bullet.isHit = true;
+            }
+          });
+          break;
+
+          ///敌军对玩家
+        ///暂时不写了，打不过 ...
+        case BulletColor.GREEN:
+
+          break;
+        case BulletColor.SAND:
+          // TODO: Handle this case.
+          break;
       }
     });
   }

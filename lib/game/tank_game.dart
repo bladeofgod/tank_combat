@@ -94,7 +94,10 @@ class TankGame extends Game{
       element.update(t);
     });
     //移除飞出屏幕的
-    bullets.removeWhere((element) => element.isOffScreen);
+    bullets.removeWhere((element) => element.isHit || element.isOffScreen);
+    //移除死亡tank
+    gTanks.removeWhere((element) => element.isDead);
+    sTanks.removeWhere((element) => element.isDead);
 
     observer.watching(t);
 
@@ -137,13 +140,15 @@ class TankGame extends Game{
 
   void onFireButtonTap(){
     if(blueBulletNum < 20){
-      bullets.add(Bullet(this,BulletColor.BLUE,position: tank.getBulletOffset(),angle: tank.getBulletAngle()));
+      bullets.add(Bullet(this,BulletColor.BLUE,tank.tankId
+          ,position: tank.getBulletOffset(),angle: tank.getBulletAngle()));
     }
 
   }
 
   void enemyTankFire<T extends TankModel>(BulletColor color,T tankModel){
-    bullets.add(Bullet(this,color,position: tankModel.getBulletOffset(),angle: tankModel.getBulletAngle()));
+    bullets.add(Bullet(this,color,tankModel.id
+        ,position: tankModel.getBulletOffset(),angle: tankModel.getBulletAngle()));
   }
 
 

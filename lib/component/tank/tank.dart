@@ -12,6 +12,7 @@ import 'package:tankcombat/game/tank_game.dart';
 
 class Tank extends BaseComponent{
 
+  final int tankId = 666;
   final TankGame game;
   Sprite bodySprite,turretSprite;
 

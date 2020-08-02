@@ -8,14 +8,19 @@ import 'package:flame/sprite.dart';
 import 'package:tankcombat/component/base_component.dart';
 import 'package:tankcombat/game/tank_game.dart';
 
+
+///blue for player
+/// green&sand for enemy
 enum BulletColor{
   BLUE,GREEN,SAND
 }
+
 
 class Bullet extends BaseComponent{
 
   final TankGame game;
   final double speed;
+  final int tankId;
   Offset position;
   double angle = 0;
   bool isOffScreen = false;
@@ -25,10 +30,14 @@ class Bullet extends BaseComponent{
                   sandSprite = Sprite('tank/bullet_green.webp');
   final BulletColor bulletColor;
 
-  Bullet(this.game,this.bulletColor,{this.position,this.angle,this.speed = 200});
+  Bullet(this.game,this.bulletColor,this.tankId,{this.position,this.angle,this.speed = 200});
+
+  //是否击中
+  bool isHit = false;
 
   @override
   void render(Canvas canvas) {
+    if(isHit) return;
     canvas.save();
     canvas.translate(position.dx, position.dy);
     canvas.rotate(angle);
