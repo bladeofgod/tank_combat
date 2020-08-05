@@ -62,6 +62,7 @@ class Bullet extends BaseComponent{
 
   @override
   void update(double t) {
+    if(isHit) return;
     if(isOffScreen)return;
 
     position = position + Offset.fromDirection(angle,speed * t);
