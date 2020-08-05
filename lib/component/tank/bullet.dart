@@ -38,6 +38,7 @@ class Bullet extends BaseComponent{
   @override
   void render(Canvas canvas) {
     if(isHit) return;
+    if(isOffScreen)return;
     canvas.save();
     canvas.translate(position.dx, position.dy);
     canvas.rotate(angle);
