@@ -11,7 +11,7 @@ class JoyStick extends StatefulWidget{
 
   final void Function(Offset) onChange;
 
-  const JoyStick({Key key, this.onChange}) : super(key: key);
+  const JoyStick({Key? key,required this.onChange}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {

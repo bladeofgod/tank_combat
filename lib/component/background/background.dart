@@ -13,8 +13,8 @@ class BattleBackground with BaseComponent{
 
   final TankGame game;
 
-  Sprite bgSprite;
-  Rect bgRect;
+  late Sprite bgSprite;
+  late Rect bgRect;
 
   BattleBackground(this.game){
     init();

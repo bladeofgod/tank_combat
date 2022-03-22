@@ -16,8 +16,8 @@ import '../bullet.dart';
 
 class SandTank extends TankModel with BaseComponent{
 
-  Rect bodyRect ;
-  Rect turretRect;
+  late Rect bodyRect ;
+  late Rect turretRect;
 
   SandTank(TankGame game, Sprite bodySprite, Sprite turretSprite,Offset position)
       : super(game, bodySprite, turretSprite,position){

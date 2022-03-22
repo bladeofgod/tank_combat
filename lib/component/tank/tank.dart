@@ -14,9 +14,9 @@ class Tank extends BaseComponent{
 
   final int tankId = 666;
   final TankGame game;
-  Sprite bodySprite,turretSprite;
+  late Sprite bodySprite,turretSprite;
 
-  Tank(this.game,{this.position}){
+  Tank(this.game,{required this.position}){
     init();
   }
   void init() async {
@@ -33,9 +33,9 @@ class Tank extends BaseComponent{
   double turretAngle = 0;
 
   //车体目标角度
-  double targetBodyAngle;
+  double? targetBodyAngle;
   //炮塔目标角度
-  double targetTurretAngle;
+  double? targetTurretAngle;
 
   //tank是否存活
   bool isDead = false;
@@ -83,30 +83,30 @@ class Tank extends BaseComponent{
     final double rotationRate = pi * t;
 
     if (targetBodyAngle != null) {
-      if (bodyAngle < targetBodyAngle) {
+      if (bodyAngle < targetBodyAngle!) {
         //车体角度和目标角度差额
-        if ((targetBodyAngle - bodyAngle).abs() > pi) {
+        if ((targetBodyAngle! - bodyAngle).abs() > pi) {
           bodyAngle = bodyAngle - rotationRate;
           if (bodyAngle < -pi) {
             bodyAngle += pi * 2;
           }
         } else {
           bodyAngle = bodyAngle + rotationRate;
-          if (bodyAngle > targetBodyAngle) {
-            bodyAngle = targetBodyAngle;
+          if (bodyAngle > targetBodyAngle!) {
+            bodyAngle = targetBodyAngle!;
           }
         }
       }
-      if (bodyAngle > targetBodyAngle) {
-        if ((targetBodyAngle - bodyAngle).abs() > pi) {
+      if (bodyAngle > targetBodyAngle!) {
+        if ((targetBodyAngle! - bodyAngle).abs() > pi) {
           bodyAngle = bodyAngle + rotationRate;
           if (bodyAngle > pi) {
             bodyAngle -= pi * 2;
           }
         } else {
           bodyAngle = bodyAngle - rotationRate;
-          if (bodyAngle < targetBodyAngle) {
-            bodyAngle = targetBodyAngle;
+          if (bodyAngle < targetBodyAngle!) {
+            bodyAngle = targetBodyAngle!;
           }
         }
       }
@@ -117,7 +117,7 @@ class Tank extends BaseComponent{
     final double rotationRate = pi * t;
 
     if(targetTurretAngle != null){
-      double localTargetTurretAngle = targetTurretAngle - bodyAngle;
+      double localTargetTurretAngle = targetTurretAngle! - bodyAngle;
       if(turretAngle < localTargetTurretAngle){
         if((localTargetTurretAngle -turretAngle).abs() > pi){
           turretAngle = turretAngle - rotationRate;

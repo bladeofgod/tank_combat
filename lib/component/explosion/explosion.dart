@@ -13,7 +13,7 @@ class OrangeExplosion extends BaseComponent{
   final TankGame game;
   final Offset position;
   final List<Sprite> sprites = [];
-  Rect exRect;
+  late Rect exRect;
 
   int playIndex =0;
 

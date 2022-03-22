@@ -25,12 +25,12 @@ class Bullet extends BaseComponent{
   double angle = 0;
   bool isOffScreen = false;
 
-  Sprite blueSprite;
-  Sprite greenSprite;
-  Sprite sandSprite ;
+  late Sprite blueSprite;
+  late Sprite greenSprite;
+  late Sprite sandSprite ;
   final BulletColor bulletColor;
 
-  Bullet(this.game,this.bulletColor,this.tankId,{this.position,this.angle,this.speed = 200}) {
+  Bullet(this.game,this.bulletColor,this.tankId,{required this.position,required this.angle,this.speed = 200}) {
     init();
   }
 

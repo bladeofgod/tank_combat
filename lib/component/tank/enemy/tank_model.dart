@@ -40,15 +40,15 @@ abstract class TankModel{
   double turretAngle = 0;
 
   //车体目标角度
-  double targetBodyAngle;
+  late double targetBodyAngle;
   //炮塔目标角度
-  double targetTurretAngle;
+  late double targetTurretAngle;
 
   //tank是否存活
   bool isDead = false;
 
   //移动到目标位置
-  Offset targetOffset;
+  late Offset targetOffset;
 
   final double ration = 0.7;
 

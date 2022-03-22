@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class FireButton extends StatelessWidget {
   final void Function() onTap;
 
-  const FireButton({Key key, this.onTap}) : super(key: key);
+  const FireButton({Key? key, required this.onTap}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SizedBox(

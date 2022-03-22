@@ -26,16 +26,20 @@ class GameObserver{
 
   bool isGenerating = false;
 
-  void watching(double t){
+  void watching(double t) async {
     if(!isGenerating){
       if(game.gTanks.length<2){
         isGenerating = true;
-        coolDown(spawnTank(TankCate.GreenTank));
+        coolDown(() async {
+          await spawnTank(TankCate.GreenTank);
+        });
         return;
       }
       if(game.sTanks.length<2){
         isGenerating = true;
-        coolDown(spawnTank(TankCate.SandTank));
+        coolDown(() async {
+          await spawnTank(TankCate.SandTank);
+        });
         return;
       }
     }
@@ -45,7 +49,7 @@ class GameObserver{
 
 
 
-  spawnTank(TankCate tankCate) async {
+  Future spawnTank(TankCate tankCate) async {
     switch(tankCate){
       case TankCate.GreenTank:
         var turretSprite = await Sprite.load('tank/t_turret_green.webp');

@@ -16,9 +16,9 @@ import 'package:tankcombat/game/tank_game.dart';
 class GreenTank extends TankModel with BaseComponent{
 
   //坦克身体
-  Rect bodyRect ;
+  late Rect bodyRect ;
   //坦克炮管
-  Rect turretRect;
+  late Rect turretRect;
 
   GreenTank(TankGame game, Sprite bodySprite, Sprite turretSprite,Offset position)
       : super(game, bodySprite, turretSprite,position){

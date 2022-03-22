@@ -17,15 +17,15 @@ import 'package:tankcombat/component/tank/tank.dart';
 import 'package:tankcombat/observer/game_observer.dart';
 
 class TankGame extends FlameGame{
-  Size screenSize;
+  late Size screenSize;
 
-  BattleBackground bg;
+  BattleBackground? bg;
 
   //玩家
-  Tank tank;
+  Tank? tank;
 
   //炮弹
-  List<Bullet> bullets;
+  List<Bullet> bullets = [];
   //绿色炮弹数量
   int greenBulletNum = 0;
   //黄色炮弹数量
@@ -42,7 +42,7 @@ class TankGame extends FlameGame{
   //爆炸动画
   List<OrangeExplosion> explosions = [];
 
-  GameObserver observer;
+  late GameObserver observer;
 
   TankGame(){
     observer = GameObserver(this);
@@ -50,12 +50,17 @@ class TankGame extends FlameGame{
   }
 
   @override
+  void onGameResize(Vector2 canvasSize) {
+    resize(canvasSize);
+    super.onGameResize(canvasSize);
+  }
+
+  @override
   void render(Canvas canvas) {
-    if(screenSize == null)return;
     //绘制草坪
-    bg.render(canvas);
+    bg?.render(canvas);
     //tank
-    tank.render(canvas);
+    tank?.render(canvas);
     //bullet
     bullets.forEach((element) {
       element.render(canvas);
@@ -69,12 +74,13 @@ class TankGame extends FlameGame{
     });
     //爆炸
     explosions.forEach((element) {element.render(canvas);});
+    super.render(canvas);
   }
 
   @override
   void update(double t) {
     if(screenSize == null)return;
-    tank.update(t);
+    tank?.update(t);
     gTanks.forEach((element) {
       element.update(t);
     });
@@ -114,9 +120,8 @@ class TankGame extends FlameGame{
 
   }
 
-  @override
-  void resize(Size size) {
-    screenSize = size;
+  void resize(Vector2 canvasSize) {
+    screenSize = Size(canvasSize.storage.first, canvasSize.storage.last);
     //initEnemyTank();
     if(bg == null){
       bg = BattleBackground(this);
@@ -126,33 +131,29 @@ class TankGame extends FlameGame{
         this,position: Offset(screenSize.width/2,screenSize.height/2),
       );
     }
-    if(bullets == null){
-      bullets = List();
-    }
-
 
   }
 
   void onLeftJoypadChange(Offset offset){
     if(offset == Offset.zero){
-      tank.targetBodyAngle = null;
+      tank?.targetBodyAngle = null;
     }else{
-      tank.targetBodyAngle = offset.direction;//范围（pi,-pi）
+      tank?.targetBodyAngle = offset.direction;//范围（pi,-pi）
     }
   }
 
   void onRightJoypadChange(Offset offset) {
     if (offset == Offset.zero) {
-      tank.targetTurretAngle = null;
+      tank?.targetTurretAngle = null;
     } else {
-      tank.targetTurretAngle = offset.direction;
+      tank?.targetTurretAngle = offset.direction;
     }
   }
 
   void onFireButtonTap(){
-    if(blueBulletNum < 20){
-      bullets.add(Bullet(this,BulletColor.BLUE,tank.tankId
-          ,position: tank.getBulletOffset(),angle: tank.getBulletAngle()));
+    if(blueBulletNum < 20 && tank != null){
+      bullets.add(Bullet(this,BulletColor.BLUE,tank!.tankId
+          ,position: tank!.getBulletOffset(),angle: tank!.getBulletAngle()));
     }
 
   }
