@@ -16,7 +16,7 @@ import 'package:tankcombat/component/tank/enemy/tank_model.dart';
 import 'package:tankcombat/component/tank/tank.dart';
 import 'package:tankcombat/observer/game_observer.dart';
 
-class TankGame extends Game{
+class TankGame extends FlameGame{
   Size screenSize;
 
   BattleBackground bg;
@@ -164,16 +164,16 @@ class TankGame extends Game{
 
 
   ///初始化敌军
-  void initEnemyTank() {
-    var turretSprite = Sprite('tank/t_turret_green.webp');
-    var bodySprite= Sprite('tank/t_body_green.webp');
+  void initEnemyTank() async {
+    var turretSprite = await Sprite.load('tank/t_turret_green.webp');
+    var bodySprite= await Sprite.load('tank/t_body_green.webp');
     gTanks.add(GreenTank(this,bodySprite,turretSprite, Offset(100,100)));
     gTanks.add(GreenTank(this,bodySprite,turretSprite, Offset(100,screenSize.height*0.8)));
 
 
     ///sand
-    var turretSpriteS = Sprite('tank/t_turret_sand.webp');
-    var bodySpriteS = Sprite('tank/t_body_sand.webp');
+    var turretSpriteS = await Sprite.load('tank/t_turret_sand.webp');
+    var bodySpriteS = await Sprite.load('tank/t_body_sand.webp');
     sTanks.add( SandTank(this,bodySpriteS,turretSpriteS,
         Offset(screenSize.width-100,100)));
     sTanks.add( SandTank(this,bodySpriteS,turretSpriteS,

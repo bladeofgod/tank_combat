@@ -23,11 +23,15 @@ class OrangeExplosion extends BaseComponent{
 
     exRect = Rect.fromCenter(center: position,width: 30,height: 30);
 
-    sprites.add(Sprite('explosion/explosion1.webp'));
-    sprites.add(Sprite('explosion/explosion2.webp'));
-    sprites.add(Sprite('explosion/explosion3.webp'));
-    sprites.add(Sprite('explosion/explosion4.webp'));
-    sprites.add(Sprite('explosion/explosion5.webp'));
+    init();
+  }
+
+  void init() async {
+    sprites.add(await Sprite.load('explosion/explosion1.webp'));
+    sprites.add(await Sprite.load('explosion/explosion2.webp'));
+    sprites.add(await Sprite.load('explosion/explosion3.webp'));
+    sprites.add(await Sprite.load('explosion/explosion4.webp'));
+    sprites.add(await Sprite.load('explosion/explosion5.webp'));
   }
 
 

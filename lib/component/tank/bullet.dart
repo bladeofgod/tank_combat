@@ -25,12 +25,20 @@ class Bullet extends BaseComponent{
   double angle = 0;
   bool isOffScreen = false;
 
-  final Sprite blueSprite = Sprite('tank/bullet_blue.webp'),
-                greenSprite = Sprite('tank/bullet_green.webp'),
-                  sandSprite = Sprite('tank/bullet_green.webp');
+  Sprite blueSprite;
+  Sprite greenSprite;
+  Sprite sandSprite ;
   final BulletColor bulletColor;
 
-  Bullet(this.game,this.bulletColor,this.tankId,{this.position,this.angle,this.speed = 200});
+  Bullet(this.game,this.bulletColor,this.tankId,{this.position,this.angle,this.speed = 200}) {
+    init();
+  }
+
+  void init() async {
+    blueSprite = await Sprite.load('tank/bullet_blue.webp');
+    greenSprite = await Sprite.load('tank/bullet_green.webp');
+    sandSprite = await Sprite.load('tank/bullet_green.webp');
+  }
 
   //是否击中
   bool isHit = false;

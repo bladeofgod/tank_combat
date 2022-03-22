@@ -17,7 +17,11 @@ class BattleBackground with BaseComponent{
   Rect bgRect;
 
   BattleBackground(this.game){
-    bgSprite = Sprite('new_map.webp');
+    init();
+  }
+
+  void init() async {
+    bgSprite = await Sprite.load('new_map.webp');
     bgRect = Rect.fromLTWH(0, 0, game.screenSize.width, game.screenSize.height);
   }
 

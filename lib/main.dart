@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flame/flame.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tankcombat/game/tank_game.dart';
@@ -33,7 +34,7 @@ void main() async{
     ]);
 
     ///全面屏
-    await SystemChrome.setEnabledSystemUIOverlays([]);
+    await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   }
 
 
@@ -44,7 +45,7 @@ void main() async{
       child: Stack(
     children: [
 
-      tankGame.widget,
+      GameWidget(game: tankGame),
 
       Column(
         children: [

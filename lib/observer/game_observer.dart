@@ -6,7 +6,7 @@
 import 'dart:math';
 
 import 'package:flame/sprite.dart';
-import 'package:flame/time.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:tankcombat/component/explosion/explosion.dart';
 import 'package:tankcombat/component/tank/bullet.dart';
@@ -45,19 +45,19 @@ class GameObserver{
 
 
 
-  spawnTank(TankCate tankCate) {
+  spawnTank(TankCate tankCate) async {
     switch(tankCate){
       case TankCate.GreenTank:
-        var turretSprite = Sprite('tank/t_turret_green.webp');
-        var bodySprite= Sprite('tank/t_body_green.webp');
+        var turretSprite = await Sprite.load('tank/t_turret_green.webp');
+        var bodySprite= await Sprite.load('tank/t_body_green.webp');
         double r = Random().nextDouble();
         game.gTanks.add( GreenTank(game,bodySprite,turretSprite,
               r < 0.5 ? Offset(100,100)
                   :Offset(100,game.screenSize.height*0.8)));
         break;
       case TankCate.SandTank:
-        var turretSprite = Sprite('tank/t_turret_sand.webp');
-        var bodySprite= Sprite('tank/t_body_sand.webp');
+        var turretSprite = await Sprite.load('tank/t_turret_sand.webp');
+        var bodySprite= await Sprite.load('tank/t_body_sand.webp');
         double r = Random().nextDouble();
         game.sTanks.add( SandTank(game,bodySprite,turretSprite,
             r < 0.5 ? Offset(game.screenSize.width-100,100)
