@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
@@ -8,92 +9,80 @@ import 'package:tankcombat/game/tank_game.dart';
 import 'package:tankcombat/widgets/fire_button.dart';
 import 'package:tankcombat/widgets/joy_stick.dart';
 
-
-void main() async{
-
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  loadAssets();
+  bool isMobile = Platform.isAndroid || Platform.isIOS;
 
-
-  bool isWeb = false;
-  try{
-    if(Platform.isAndroid || Platform.isIOS){
-      isWeb = false;
-    }else{
-      isWeb = true;
-    }
-  }catch(e){
-    isWeb = true;
-  }
-
-  if(! isWeb){
+  if (isMobile) {
     ///设置横屏
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft
-    ]);
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft]);
 
     ///全面屏
     await SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   }
 
-
-
   final TankGame tankGame = TankGame();
 
-  runApp(Directionality(textDirection: TextDirection.ltr,
+  runApp(Directionality(
+      textDirection: TextDirection.ltr,
       child: Stack(
-    children: [
-
-      GameWidget(game: tankGame),
-
-      Column(
         children: [
-
-          Spacer(),
-          //发射按钮
-          Row(
+          FutureBuilder<List<ui.Image>>(
+            future: loadAssets(),
+            initialData: [],
+            builder: (ctx, snapShot) {
+              if(snapShot.data?.isEmpty ?? true) {
+                return Center(
+                  child: LinearProgressIndicator(
+                    color: Colors.blue,
+                  ),
+                );
+              }
+              return GameWidget(game: tankGame);
+            },
+          ),
+          Column(
             children: [
-              SizedBox(width: 48),
-              FireButton(
-                onTap: tankGame.onFireButtonTap,
-              ),
               Spacer(),
-              FireButton(
-                onTap: tankGame.onFireButtonTap,
+              //发射按钮
+              Row(
+                children: [
+                  SizedBox(width: 48),
+                  FireButton(
+                    buttonControllerListener: tankGame,
+                  ),
+                  Spacer(),
+                  FireButton(
+                    buttonControllerListener: tankGame,
+                  ),
+                  SizedBox(width: 48),
+                ],
               ),
-              SizedBox(width: 48),
+              SizedBox(height: 20),
+              //摇杆
+              Row(
+                children: [
+                  SizedBox(width: 48),
+                  JoyStick(
+                    onChange: tankGame.bodyAngleChanged,
+                  ),
+                  Spacer(),
+                  JoyStick(
+                    onChange: tankGame.turretAngleChanged,
+                  ),
+                  SizedBox(width: 48)
+                ],
+              ),
+              SizedBox(height: 24)
             ],
           ),
-          SizedBox(height: 20),
-          //摇杆
-          Row(
-            children: [
-              SizedBox(width: 48),
-              JoyStick(
-                onChange: (Offset delta)=>tankGame.onLeftJoypadChange(delta),
-              ),
-              Spacer(),
-              JoyStick(
-                onChange: (Offset delta)=>tankGame.onRightJoypadChange(delta),
-              ),
-              SizedBox(width: 48)
-            ],
-          ),
-          SizedBox(height: 24)
         ],
-      ),
-
-    ],
-  )));
-
-
-
+      )));
 }
 
-void loadAssets(){
-  Flame.images.loadAll([
+Future<List<ui.Image>> loadAssets() {
+  return Flame.images.loadAll([
     'new_map.webp',
     'tank/t_body_blue.webp',
     'tank/t_turret_blue.webp',
@@ -111,4 +100,3 @@ void loadAssets(){
     'explosion/explosion5.webp',
   ]);
 }
-

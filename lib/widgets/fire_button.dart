@@ -4,10 +4,15 @@
 */
 import 'package:flutter/material.dart';
 
-class FireButton extends StatelessWidget {
-  final void Function() onTap;
+import '../controller/controller_listener.dart';
 
-  const FireButton({Key? key, required this.onTap}) : super(key: key);
+class FireButton extends StatelessWidget {
+
+  const FireButton({Key? key, required this.buttonControllerListener}) : super(key: key);
+
+  final ButtonControllerListener buttonControllerListener;
+
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -23,7 +28,7 @@ class FireButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(32),
             ),
           ),
-          onTap: onTap,
+          onTap: buttonControllerListener.fireButtonTriggered,
         ),
       ),
     );

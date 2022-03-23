@@ -16,7 +16,9 @@ import 'package:tankcombat/component/tank/enemy/tank_model.dart';
 import 'package:tankcombat/component/tank/tank.dart';
 import 'package:tankcombat/observer/game_observer.dart';
 
-class TankGame extends FlameGame{
+import '../controller/controller_listener.dart';
+
+class TankGame extends FlameGame implements ButtonControllerListener, DirectionControllerListener{
   late Size screenSize;
 
   BattleBackground? bg;
@@ -131,32 +133,8 @@ class TankGame extends FlameGame{
         this,position: Offset(screenSize.width/2,screenSize.height/2),
       );
     }
-
   }
 
-  void onLeftJoypadChange(Offset offset){
-    if(offset == Offset.zero){
-      tank?.targetBodyAngle = null;
-    }else{
-      tank?.targetBodyAngle = offset.direction;//范围（pi,-pi）
-    }
-  }
-
-  void onRightJoypadChange(Offset offset) {
-    if (offset == Offset.zero) {
-      tank?.targetTurretAngle = null;
-    } else {
-      tank?.targetTurretAngle = offset.direction;
-    }
-  }
-
-  void onFireButtonTap(){
-    if(blueBulletNum < 20 && tank != null){
-      bullets.add(Bullet(this,BulletColor.BLUE,tank!.tankId
-          ,position: tank!.getBulletOffset(),angle: tank!.getBulletAngle()));
-    }
-
-  }
 
   void enemyTankFire<T extends TankModel>(BulletColor color,T tankModel){
     bullets.add(Bullet(this,color,tankModel.id
@@ -179,6 +157,32 @@ class TankGame extends FlameGame{
         Offset(screenSize.width-100,100)));
     sTanks.add( SandTank(this,bodySpriteS,turretSpriteS,
             Offset(screenSize.width-100,screenSize.height*0.8)));
+  }
+
+  @override
+  void fireButtonTriggered() {
+    if(blueBulletNum < 20 && tank != null){
+      bullets.add(Bullet(this,BulletColor.BLUE,tank!.tankId
+          ,position: tank!.getBulletOffset(),angle: tank!.getBulletAngle()));
+    }
+  }
+
+  @override
+  void bodyAngleChanged(Offset newAngle) {
+    if(newAngle == Offset.zero){
+      tank?.targetBodyAngle = null;
+    }else{
+      tank?.targetBodyAngle = newAngle.direction;//范围（pi,-pi）
+    }
+  }
+
+  @override
+  void turretAngleChanged(Offset newAngle) {
+    if (newAngle == Offset.zero) {
+      tank?.targetTurretAngle = null;
+    } else {
+      tank?.targetTurretAngle = newAngle.direction;
+    }
   }
 
 
