@@ -30,9 +30,10 @@ class JoyStickState extends State<JoyStick> {
     });
   }
 
-  void calculateDelta(Offset offset) {
+  Offset calculateDelta(Offset offset) {
     Offset newD = offset - Offset(stickSize / 2, stickSize / 2);
-    updateDelta(Offset.fromDirection(newD.direction, min(stickSize / 4, newD.distance))); //活动范围控制在bgSize之内
+    //活动范围控制在stickSize之内
+    return Offset.fromDirection(newD.direction, min(stickSize / 4, newD.distance));
   }
 
   ///遥感尺寸
@@ -45,7 +46,7 @@ class JoyStickState extends State<JoyStick> {
       height: stickSize,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(stickSize / 2),
-        color: Color(0x88ffffff),
+        color: const Color(0x88ffffff),
       ),
       child: GestureDetector(
         //摇杆背景
@@ -73,11 +74,11 @@ class JoyStickState extends State<JoyStick> {
   }
 
   void onDragDown(DragDownDetails d) {
-    calculateDelta(d.localPosition);
+    updateDelta(calculateDelta(d.localPosition));
   }
 
   void onDragUpdate(DragUpdateDetails d) {
-    calculateDelta(d.localPosition);
+    updateDelta(calculateDelta(d.localPosition));
   }
 
   void onDragEnd(DragEndDetails d) {
