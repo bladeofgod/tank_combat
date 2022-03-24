@@ -18,7 +18,7 @@ import 'package:tankcombat/observer/game_observer.dart';
 
 import '../controller/controller_listener.dart';
 
-class TankGame extends FlameGame implements ButtonControllerListener, DirectionControllerListener{
+class TankGame extends FlameGame with TankController{
   late Size screenSize;
 
   BattleBackground? bg;

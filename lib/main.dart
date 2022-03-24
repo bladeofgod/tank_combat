@@ -9,6 +9,8 @@ import 'package:tankcombat/game/tank_game.dart';
 import 'package:tankcombat/widgets/fire_button.dart';
 import 'package:tankcombat/widgets/joy_stick.dart';
 
+import 'controller/control_panel_widget.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -42,41 +44,7 @@ void main() async {
               return GameWidget(game: tankGame);
             },
           ),
-          Column(
-            children: [
-              Spacer(),
-              //发射按钮
-              Row(
-                children: [
-                  SizedBox(width: 48),
-                  FireButton(
-                    buttonControllerListener: tankGame,
-                  ),
-                  Spacer(),
-                  FireButton(
-                    buttonControllerListener: tankGame,
-                  ),
-                  SizedBox(width: 48),
-                ],
-              ),
-              SizedBox(height: 20),
-              //摇杆
-              Row(
-                children: [
-                  SizedBox(width: 48),
-                  JoyStick(
-                    onChange: tankGame.bodyAngleChanged,
-                  ),
-                  Spacer(),
-                  JoyStick(
-                    onChange: tankGame.turretAngleChanged,
-                  ),
-                  SizedBox(width: 48)
-                ],
-              ),
-              SizedBox(height: 24)
-            ],
-          ),
+          ControlPanelWidget(tankController: tankGame,),
         ],
       )));
 }

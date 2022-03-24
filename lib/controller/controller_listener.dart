@@ -22,6 +22,8 @@ abstract class ButtonControllerListener{
 
 }
 
+mixin TankController implements DirectionControllerListener, ButtonControllerListener {}
+
 
 
 
