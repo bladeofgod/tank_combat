@@ -10,7 +10,7 @@ import 'package:flame/sprite.dart';
 import 'package:tankcombat/component/base_component.dart';
 import 'package:tankcombat/game/tank_game.dart';
 
-class Tank extends BaseComponent{
+class Tank implements BaseComponent{
 
   final int tankId = 666;
   final TankGame game;

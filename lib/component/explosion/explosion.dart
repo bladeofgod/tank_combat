@@ -8,7 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:tankcombat/component/base_component.dart';
 import 'package:tankcombat/game/tank_game.dart';
 
-class OrangeExplosion extends BaseComponent{
+class OrangeExplosion implements BaseComponent{
 
   final TankGame game;
   final Offset position;

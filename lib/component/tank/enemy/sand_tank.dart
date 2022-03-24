@@ -14,7 +14,7 @@ import 'package:tankcombat/game/tank_game.dart';
 
 import '../bullet.dart';
 
-class SandTank extends TankModel with BaseComponent{
+class SandTank extends TankModel implements BaseComponent{
 
   late Rect bodyRect ;
   late Rect turretRect;

@@ -8,52 +8,31 @@ import 'dart:ui';
 import 'package:flame/sprite.dart';
 import 'package:tankcombat/component/base_component.dart';
 import 'package:tankcombat/game/tank_game.dart';
+import 'package:vector_math/vector_math_64.dart';
 
-class BattleBackground with BaseComponent{
+class BattleBackground implements WindowComponent {
 
-  final TankGame game;
-
-  late Sprite bgSprite;
-  late Rect bgRect;
-
-  BattleBackground(this.game){
+  BattleBackground() {
     init();
   }
 
+  Sprite? bgSprite;
+  Rect? bgRect;
+
   void init() async {
     bgSprite = await Sprite.load('new_map.webp');
-    bgRect = Rect.fromLTWH(0, 0, game.screenSize.width, game.screenSize.height);
   }
 
   @override
   void render(Canvas canvas) {
-    bgSprite.renderRect(canvas, bgRect);
-//    canvas.drawRect(Rect.fromLTWH(0, 0, game.screenSize.width, game.screenSize.height)
-//        , Paint()..color = Color(0xff27ae60));
+    bgSprite?.renderRect(canvas, bgRect ?? Rect.zero);
   }
 
   @override
-  void update(double t) {
+  void update(double t) {}
 
+  @override
+  void onGameResize(Vector2 canvasSize) {
+    bgRect = Rect.fromLTWH(0, 0, canvasSize.storage.first, canvasSize.storage.last);
   }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

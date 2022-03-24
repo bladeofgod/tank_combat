@@ -13,7 +13,7 @@ import 'package:tankcombat/component/tank/bullet.dart';
 import 'package:tankcombat/component/tank/enemy/tank_model.dart';
 import 'package:tankcombat/game/tank_game.dart';
 
-class GreenTank extends TankModel with BaseComponent{
+class GreenTank extends TankModel implements BaseComponent{
 
   //坦克身体
   late Rect bodyRect ;

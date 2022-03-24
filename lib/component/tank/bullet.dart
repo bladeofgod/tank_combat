@@ -16,7 +16,7 @@ enum BulletColor{
 }
 
 
-class Bullet extends BaseComponent{
+class Bullet implements BaseComponent{
 
   final TankGame game;
   final double speed;

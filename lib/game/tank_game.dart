@@ -19,9 +19,14 @@ import 'package:tankcombat/observer/game_observer.dart';
 import '../controller/controller_listener.dart';
 
 class TankGame extends FlameGame with TankController{
+
+  TankGame(){
+    observer = GameObserver(this);
+  }
+
   late Size screenSize;
 
-  BattleBackground? bg;
+  final BattleBackground bg = BattleBackground();
 
   //玩家
   Tank? tank;
@@ -46,14 +51,17 @@ class TankGame extends FlameGame with TankController{
 
   late GameObserver observer;
 
-  TankGame(){
-    observer = GameObserver(this);
 
-  }
 
   @override
   void onGameResize(Vector2 canvasSize) {
-    resize(canvasSize);
+    screenSize = Size(canvasSize.storage.first, canvasSize.storage.last);
+    bg.onGameResize(canvasSize);
+    if(tank == null){
+      tank = Tank(
+        this,position: Offset(screenSize.width/2,screenSize.height/2),
+      );
+    }
     super.onGameResize(canvasSize);
   }
 
@@ -122,19 +130,6 @@ class TankGame extends FlameGame with TankController{
 
   }
 
-  void resize(Vector2 canvasSize) {
-    screenSize = Size(canvasSize.storage.first, canvasSize.storage.last);
-    //initEnemyTank();
-    if(bg == null){
-      bg = BattleBackground(this);
-    }
-    if(tank == null){
-      tank = Tank(
-        this,position: Offset(screenSize.width/2,screenSize.height/2),
-      );
-    }
-  }
-
 
   void enemyTankFire<T extends TankModel>(BulletColor color,T tankModel){
     bullets.add(Bullet(this,color,tankModel.id
@@ -188,9 +183,6 @@ class TankGame extends FlameGame with TankController{
 
 
 }
-
-
-
 
 
 
