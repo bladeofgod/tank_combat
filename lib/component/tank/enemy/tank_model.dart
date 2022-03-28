@@ -10,71 +10,17 @@ import 'package:flutter/material.dart';
 import 'package:tankcombat/game/tank_game.dart';
 
 import '../../base_component.dart';
+import '../tank_factory.dart';
 
-///坦克基础模型
-abstract class BaseTankModel {
-  BaseTankModel({
-    required this.id,
-    required this.bodySpritePath,
-    required this.turretSpritePath,
-    this.ratio = 0.7,
-    this.speed = 80,
-    this.turnSpeed = 40,
-    this.bodyWidth = 38,
-    this.bodyHeight = 32,
-    this.turretWidth = 22,
-    this.turretHeight = 6,
-  });
 
-  final int id;
 
-  ///车体宽度
-  final double bodyWidth;
+class PlayerTank extends BaseTank implements BaseComponent{
 
-  ///车体高度
-  final double bodyHeight;
-
-  ///炮塔宽度(长)
-  final double turretWidth;
-
-  ///炮塔高度(直径)
-  final double turretHeight;
-
-  ///坦克尺寸比例
-  final double ratio;
-
-  ///直线速度
-  final double speed;
-
-  ///转弯速度
-  final double turnSpeed;
-
-  ///车体纹理
-  final String bodySpritePath;
-
-  ///炮塔纹理
-  final String turretSpritePath;
-
-  ///车体
-  Sprite? bodySprite;
-
-  ///炮塔
-  Sprite? turretSprite;
-
-  ///配置完成
-  bool isStandBy = false;
-
-}
-
-class DefaultTank extends BaseTank implements BaseComponent{
-
-  DefaultTank({
+  PlayerTank({
     required int id,
     required Offset birthPosition,
-    required String bodySpritePath,
-    required String turretSpritePath})
-      :
-        super(id: id, birthPosition: birthPosition, bodySpritePath: bodySpritePath, turretSpritePath: turretSpritePath);
+    required TankModel config,})
+      : super(id: id, birthPosition: birthPosition, config: config);
 
 
   @override
@@ -207,17 +153,18 @@ class DefaultTank extends BaseTank implements BaseComponent{
 
 }
 
-abstract class BaseTank extends BaseTankModel{
-  BaseTank({required int id,
-    required Offset birthPosition,
-    required String bodySpritePath,
-    required String turretSpritePath})
-      : position = birthPosition,
-        super(id: id, bodySpritePath: bodySpritePath, turretSpritePath: turretSpritePath) {
+abstract class BaseTank{
+  BaseTank({
+    required int id,
+    required this.config,
+    required Offset birthPosition,})
+      : position = birthPosition {
     bodyRect = Rect.fromCenter(center: Offset.zero, width: bodyWidth * ratio, height: bodyHeight * ratio);
     turretRect = Rect.fromCenter(center: Offset.zero, width: turretWidth * ratio, height: turretHeight * ratio);
     init();
   }
+
+  final TankModel config;
 
   ///坦克位置
   Offset position;
@@ -230,6 +177,9 @@ abstract class BaseTank extends BaseTankModel{
 
   ///炮塔角度
   double turretAngle = 0;
+
+  ///移动距离
+  double movedDis = 0;
 
   ///车体目标角度
   late double targetBodyAngle;
@@ -246,7 +196,44 @@ abstract class BaseTank extends BaseTankModel{
   ///tank是否存活
   bool isDead = false;
 
-  @mustCallSuper
+  ///车体
+  Sprite? bodySprite;
+
+  ///炮塔
+  Sprite? turretSprite;
+
+  ///配置完成
+  bool isStandBy = false;
+
+  int get id => config.id;
+
+  ///车体宽度
+  double get bodyWidth => config.bodyWidth;
+
+  ///车体高度
+  double get bodyHeight => config.bodyHeight;
+
+  ///炮塔宽度(长)
+  double get turretWidth => config.turretWidth;
+
+  ///炮塔高度(直径)
+  double get turretHeight => config.turretHeight;
+
+  ///坦克尺寸比例
+  double get ratio => config.ratio;
+
+  ///直线速度
+  double get speed => config.speed;
+
+  ///转弯速度
+  double get turnSpeed => config.turnSpeed;
+
+  ///车体纹理
+  String get bodySpritePath =>  config.bodySpritePath;
+
+  ///炮塔纹理
+  String get turretSpritePath => config.turretSpritePath;
+
   Future<bool> init() async {
     bodySprite = await Sprite.load(bodySpritePath);
     turretSprite = await Sprite.load(turretSpritePath);
@@ -275,52 +262,52 @@ abstract class BaseTank extends BaseTankModel{
 
 }
 
-abstract class TankModel {
-  final int id;
-
-  final TankGame game;
-  Sprite bodySprite, turretSprite;
-
-  //出生位置
-  Offset position;
-
-  TankModel(this.game, this.bodySprite, this.turretSprite, this.position) : id = DateTime.now().millisecondsSinceEpoch + Random().nextInt(100);
-
-  ///随机生成路线用到
-  final int seedNum = 50;
-  final int seedRatio = 2;
-
-  //移动的路线
-  double movedDis = 0;
-
-  //直线速度
-  final double speed = 80;
-
-  //转弯速度
-  final double turnSpeed = 40;
-
-  //车体角度
-  double bodyAngle = 0;
-
-  //炮塔角度
-  double turretAngle = 0;
-
-  //车体目标角度
-  late double targetBodyAngle;
-
-  //炮塔目标角度
-  late double targetTurretAngle;
-
-  //tank是否存活
-  bool isDead = false;
-
-  //移动到目标位置
-  late Offset targetOffset;
-
-  final double ration = 0.7;
-
-  ///获取炮弹发射位置
-  Offset getBulletOffset();
-
-  double getBulletAngle();
-}
+// abstract class TankModel {
+//   final int id;
+//
+//   final TankGame game;
+//   Sprite bodySprite, turretSprite;
+//
+//   //出生位置
+//   Offset position;
+//
+//   TankModel(this.game, this.bodySprite, this.turretSprite, this.position) : id = DateTime.now().millisecondsSinceEpoch + Random().nextInt(100);
+//
+//   ///随机生成路线用到
+//   final int seedNum = 50;
+//   final int seedRatio = 2;
+//
+//   //移动的路线
+//   double movedDis = 0;
+//
+//   //直线速度
+//   final double speed = 80;
+//
+//   //转弯速度
+//   final double turnSpeed = 40;
+//
+//   //车体角度
+//   double bodyAngle = 0;
+//
+//   //炮塔角度
+//   double turretAngle = 0;
+//
+//   //车体目标角度
+//   late double targetBodyAngle;
+//
+//   //炮塔目标角度
+//   late double targetTurretAngle;
+//
+//   //tank是否存活
+//   bool isDead = false;
+//
+//   //移动到目标位置
+//   late Offset targetOffset;
+//
+//   final double ration = 0.7;
+//
+//   ///获取炮弹发射位置
+//   Offset getBulletOffset();
+//
+//   double getBulletAngle();
+// }
