@@ -24,6 +24,7 @@ class TankModelBuilder{
     required this.id,
     required this.bodySpritePath,
     required this.turretSpritePath,
+    required this.activeSize,
 });
 
   final int id;
@@ -33,6 +34,10 @@ class TankModelBuilder{
 
   ///炮塔纹理
   final String turretSpritePath;
+
+  ///活动范围
+  /// * 一般是地图尺寸
+  Size activeSize;
 
   ///车体宽度
   double bodyWidth = 38;
@@ -55,6 +60,10 @@ class TankModelBuilder{
   ///转弯速度
   double turnSpeed = 40;
 
+  ///设置活动范围
+  void setActiveSize(Size size) {
+    activeSize = size;
+  }
 
   ///设置车身尺寸
   void setBodySize(double width, double height) {
@@ -93,7 +102,9 @@ class TankModelBuilder{
         bodyWidth: bodyWidth,
         bodyHeight: bodyHeight,
         turretWidth: turretWidth,
-        turretHeight: turretHeight);
+        turretHeight: turretHeight,
+        activeSize: activeSize,
+    );
 
   }
 
@@ -113,6 +124,7 @@ class TankModel {
     required this.bodyHeight,
     required this.turretWidth,
     required this.turretHeight,
+    required this.activeSize
   });
 
   final int id;
@@ -144,6 +156,9 @@ class TankModel {
   ///炮塔纹理
   final String turretSpritePath;
 
+  ///活动范围
+  /// * 一般是地图尺寸
+  final Size activeSize;
 
 }
 

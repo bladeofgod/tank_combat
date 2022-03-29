@@ -59,7 +59,6 @@ class Tank implements BaseComponent{
   }
 
 
-
   void drawBody(Canvas canvas) {
     //将canvas 原点设置在tank上
     canvas.save();

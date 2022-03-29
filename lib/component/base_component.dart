@@ -7,6 +7,7 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
+//todo 替代为 PositionComponent
 abstract class BaseComponent{
 
   void render(Canvas canvas);
