@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:tankcombat/component/tank/bullet.dart';
 import 'package:tankcombat/component/tank/enemy/tank_model.dart';
 
 /// 作者：李佳奇
@@ -8,12 +9,22 @@ import 'package:tankcombat/component/tank/enemy/tank_model.dart';
 
 class TankFactory{
 
-  PlayerTank buildPlayerTank(TankModel model, Offset birthPosition) {
+  static PlayerTank buildPlayerTank(TankModel model, Offset birthPosition) {
     return PlayerTank(
-        id: DateTime.now().millisecondsSinceEpoch,
+        id: model.id,
         birthPosition: birthPosition,
         config: model);
   }
+
+  static ComputerTank buildGreenTank(TankModel model, Offset birthPosition) {
+    return ComputerTank.green(id: model.id, birthPosition: birthPosition, config: model);
+  }
+
+
+  static ComputerTank buildSandTank(TankModel model, Offset birthPosition) {
+    return ComputerTank.sand(id: model.id, birthPosition: birthPosition, config: model);
+  }
+
 
 }
 
@@ -91,6 +102,7 @@ class TankModelBuilder{
   void setTurnSpeed(double s) {
     turnSpeed = s;
   }
+
 
   TankModel build() {
     return TankModel(id: id,

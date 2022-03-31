@@ -1,4 +1,4 @@
-import '../component/tank/bullet.dart';
+
 import '../component/tank/enemy/tank_model.dart';
 
 /// 作者：李佳奇
@@ -6,7 +6,7 @@ import '../component/tank/enemy/tank_model.dart';
 /// 备注：一些游戏接口
 
 abstract class ComputerTankAction{
-  void computerTankFire(TankCalculator calculator, BulletColor color);
+  void computerTankFire(TankFireHelper helper);
 }
 
 

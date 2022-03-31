@@ -8,47 +8,75 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
+import 'package:tankcombat/component/tank/bullet.dart';
 
 import '../../base_component.dart';
 import '../tank_factory.dart';
 
 ///电脑
-class ComputerTank extends DefaultTank{
+class ComputerTank extends DefaultTank {
+  factory ComputerTank.green({
+    required int id,
+    required Offset birthPosition,
+    required TankModel config,
+  }) {
+    return ComputerTank(
+        id: id, birthPosition: birthPosition, config: config, bullet: ComputerBullet.green(tankId: id, activeSize: config.activeSize));
+  }
+
+  factory ComputerTank.sand({
+    required int id,
+    required Offset birthPosition,
+    required TankModel config,
+  }) {
+    return ComputerTank(id: id, birthPosition: birthPosition, config: config, bullet: ComputerBullet.sand(tankId: id, activeSize: config.activeSize));
+  }
+
   ComputerTank({
     required int id,
     required Offset birthPosition,
-    required TankModel config})
-      : super(id: id, birthPosition: birthPosition, config: config) {
-    generateNewTarget();
-  }
+    required TankModel config,
+    required this.bullet,
+  }) : super(id: id, birthPosition: birthPosition, config: config);
 
   ///用于生成随机路线
   static final Random random = Random();
+
   ///活动边界
   static final double activeBorderLow = 0.01, activeBorderUp = 1 - activeBorderLow;
 
   ///最大单向移动距离
   static final double maxMovedDistance = 100;
 
+  BaseBullet bullet;
+
   ///移动的距离
   double movedDis = 0;
 
   void generateNewTarget() {
-    final double x = random.nextDouble().clamp(activeBorderLow, activeBorderUp) * config.activeSize.width;
-    final double y = random.nextDouble().clamp(activeBorderLow, activeBorderUp) * config.activeSize.height;
+    Future.delayed(const Duration(seconds: 1), () {
+      final double x = random.nextDouble().clamp(activeBorderLow, activeBorderUp) * config.activeSize.width;
+      final double y = random.nextDouble().clamp(activeBorderLow, activeBorderUp) * config.activeSize.height;
 
-    targetOffset = Offset(x,y);
+      targetOffset = Offset(x, y);
 
-    final Offset vector = targetOffset - position;
-    targetBodyAngle = vector.direction;
-    targetTurretAngle = vector.direction;
+      final Offset vector = targetOffset - position;
+      targetBodyAngle = vector.direction;
+      targetTurretAngle = vector.direction;
+    });
+  }
+
+  @override
+  void deposit() {
+    super.deposit();
+    generateNewTarget();
   }
 
   @override
   void move(double t) {
-    if(targetBodyAngle != null) {
+    if (targetBodyAngle != null) {
       movedDis += speed * t;
-      if(movedDis > maxMovedDistance) {
+      if (movedDis > maxMovedDistance) {
         super.move(t);
       } else {
         movedDis = 0;
@@ -57,28 +85,30 @@ class ComputerTank extends DefaultTank{
     }
   }
 
+  @override
+  BaseBullet getBullet() => bullet;
 }
-
 
 ///玩家
-class PlayerTank extends DefaultTank{
-  PlayerTank({
-    required int id,
-    required Offset birthPosition,
-    required TankModel config})
+class PlayerTank extends DefaultTank {
+  PlayerTank({required int id, required Offset birthPosition, required TankModel config})
       : super(id: id, birthPosition: birthPosition, config: config);
 
+  @override
+  BaseBullet getBullet() => PlayerBullet(tankId: id, activeSize: config.activeSize);
 }
 
-
-abstract class DefaultTank extends BaseTank implements WindowComponent{
-
+abstract class DefaultTank extends BaseTank implements WindowComponent {
   DefaultTank({
     required int id,
     required Offset birthPosition,
-    required TankModel config,})
-      : super(id: id, birthPosition: birthPosition, config: config);
+    required TankModel config,
+  }) : super(id: id, birthPosition: birthPosition, config: config);
 
+  @override
+  void deposit() {
+    isDead = false;
+  }
 
   @override
   void onGameResize(Vector2 canvasSize) {
@@ -87,7 +117,7 @@ abstract class DefaultTank extends BaseTank implements WindowComponent{
 
   @override
   void render(Canvas canvas) {
-    if(!isStandBy || isDead) {
+    if (!isStandBy || isDead) {
       return;
     }
     //将canvas 原点设置在tank上
@@ -100,7 +130,7 @@ abstract class DefaultTank extends BaseTank implements WindowComponent{
 
   @override
   void update(double t) {
-    if(!isStandBy || isDead) {
+    if (!isStandBy || isDead) {
       return;
     }
     rotateBody(t);
@@ -111,7 +141,7 @@ abstract class DefaultTank extends BaseTank implements WindowComponent{
   @override
   void drawBody(Canvas canvas) {
     canvas.rotate(bodyAngle);
-    bodySprite?.renderRect(canvas,bodyRect);
+    bodySprite?.renderRect(canvas, bodyRect);
   }
 
   @override
@@ -124,20 +154,19 @@ abstract class DefaultTank extends BaseTank implements WindowComponent{
 
   @override
   void move(double t) {
-    if(targetBodyAngle == null)
-      return;
-    if(bodyAngle == targetBodyAngle){
+    if (targetBodyAngle == null) return;
+    if (bodyAngle == targetBodyAngle) {
       //tank 直线时 移动速度快
-      position += Offset.fromDirection(bodyAngle,speed * t);//100 是像素
-    }else{
+      position += Offset.fromDirection(bodyAngle, speed * t); //100 是像素
+    } else {
       //tank旋转时 移动速度要慢
-      position += Offset.fromDirection(bodyAngle,turnSpeed * t);
+      position += Offset.fromDirection(bodyAngle, turnSpeed * t);
     }
   }
 
   @override
   void rotateBody(double t) {
-    if(targetBodyAngle != null) {
+    if (targetBodyAngle != null) {
       final double rotationRate = pi * t;
       if (bodyAngle < targetBodyAngle!) {
         //车体角度和目标角度差额
@@ -166,44 +195,46 @@ abstract class DefaultTank extends BaseTank implements WindowComponent{
         }
       }
     }
-
   }
 
   @override
   void rotateTurret(double t) {
-    if(targetTurretAngle != null) {
+    if (targetTurretAngle != null) {
       final double rotationRate = pi * t;
       //炮塔和车身夹角
       final double localTargetTurretAngle = targetTurretAngle! - bodyAngle;
-      if(turretAngle < localTargetTurretAngle){
-        if((localTargetTurretAngle - turretAngle).abs() > pi){
+      if (turretAngle < localTargetTurretAngle) {
+        if ((localTargetTurretAngle - turretAngle).abs() > pi) {
           turretAngle -= rotationRate;
           //超出临界值，进行转换 即：小于-pi时，转换成pi之后继续累加，具体参考 笛卡尔坐标，范围是（-pi,pi）
-          if(turretAngle < -pi){
-            turretAngle += pi*2;
+          if (turretAngle < -pi) {
+            turretAngle += pi * 2;
           }
-        }else{
+        } else {
           turretAngle += rotationRate;
-          if(turretAngle > localTargetTurretAngle){
+          if (turretAngle > localTargetTurretAngle) {
             turretAngle = localTargetTurretAngle;
           }
         }
       }
-      if(turretAngle > localTargetTurretAngle){
-        if((localTargetTurretAngle - turretAngle).abs() > pi){
+      if (turretAngle > localTargetTurretAngle) {
+        if ((localTargetTurretAngle - turretAngle).abs() > pi) {
           turretAngle += rotationRate;
-          if(turretAngle > pi){
-            turretAngle -= pi*2;
+          if (turretAngle > pi) {
+            turretAngle -= pi * 2;
           }
-        }else{
+        } else {
           turretAngle -= rotationRate;
-          if(turretAngle < localTargetTurretAngle){
+          if (turretAngle < localTargetTurretAngle) {
             turretAngle = localTargetTurretAngle;
           }
         }
       }
     }
   }
+
+  @override
+  int getTankId() => id;
 
   @override
   double getBulletFireAngle() {
@@ -218,26 +249,34 @@ abstract class DefaultTank extends BaseTank implements WindowComponent{
   }
 
   @override
-  Offset getBulletFirePosition() => position + Offset.fromDirection(getBulletFireAngle(), bulletBornLoc,);
-
+  Offset getBulletFirePosition() =>
+      position +
+      Offset.fromDirection(
+        getBulletFireAngle(),
+        bulletBornLoc,
+      );
 }
 
+///tank 开火辅助接口
+abstract class TankFireHelper {
+  ///隶属于的坦克
+  int getTankId();
 
-///tank 辅助计算器
-abstract class TankCalculator{
   ///获取炮弹发射位置
   Offset getBulletFirePosition();
 
   ///获取炮弹发射角度
   double getBulletFireAngle();
+
+  BaseBullet getBullet();
 }
 
-abstract class BaseTank implements TankCalculator{
+abstract class BaseTank implements TankFireHelper {
   BaseTank({
     required int id,
     required this.config,
-    required Offset birthPosition,})
-      : position = birthPosition {
+    required Offset birthPosition,
+  }) : position = birthPosition {
     bodyRect = Rect.fromCenter(center: Offset.zero, width: bodyWidth * ratio, height: bodyHeight * ratio);
     turretRect = Rect.fromCenter(center: Offset.zero, width: turretWidth * ratio, height: turretHeight * ratio);
     init();
@@ -275,7 +314,7 @@ abstract class BaseTank implements TankCalculator{
   late Rect turretRect;
 
   ///tank是否存活
-  bool isDead = false;
+  bool isDead = true;
 
   ///车体
   Sprite? bodySprite;
@@ -310,7 +349,7 @@ abstract class BaseTank implements TankCalculator{
   double get turnSpeed => config.turnSpeed;
 
   ///车体纹理
-  String get bodySpritePath =>  config.bodySpritePath;
+  String get bodySpritePath => config.bodySpritePath;
 
   ///炮塔纹理
   String get turretSpritePath => config.turretSpritePath;
@@ -321,6 +360,9 @@ abstract class BaseTank implements TankCalculator{
     isStandBy = true;
     return isStandBy;
   }
+
+  ///部署
+  void deposit();
 
   ///移动
   /// [t] 过渡时间-> 理论值16.66ms
@@ -339,7 +381,4 @@ abstract class BaseTank implements TankCalculator{
   ///旋转炮塔
   /// [t] 过渡时间-> 理论值16.66ms
   void rotateTurret(double t);
-
-
 }
-
