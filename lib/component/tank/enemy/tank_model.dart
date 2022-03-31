@@ -5,6 +5,7 @@
 
 import 'dart:math';
 
+import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 
@@ -70,7 +71,7 @@ class PlayerTank extends DefaultTank{
 }
 
 
-abstract class DefaultTank extends BaseTank implements BaseComponent{
+abstract class DefaultTank extends BaseTank implements WindowComponent{
 
   DefaultTank({
     required int id,
@@ -78,6 +79,11 @@ abstract class DefaultTank extends BaseTank implements BaseComponent{
     required TankModel config,})
       : super(id: id, birthPosition: birthPosition, config: config);
 
+
+  @override
+  void onGameResize(Vector2 canvasSize) {
+    config.activeSize = canvasSize.toSize();
+  }
 
   @override
   void render(Canvas canvas) {
@@ -335,56 +341,5 @@ abstract class BaseTank implements TankCalculator{
   void rotateTurret(double t);
 
 
-
-
 }
 
-// abstract class TankModel {
-//   final int id;
-//
-//   final TankGame game;
-//   Sprite bodySprite, turretSprite;
-//
-//   //出生位置
-//   Offset position;
-//
-//   TankModel(this.game, this.bodySprite, this.turretSprite, this.position) : id = DateTime.now().millisecondsSinceEpoch + Random().nextInt(100);
-//
-//   ///随机生成路线用到
-//   final int seedNum = 50;
-//   final int seedRatio = 2;
-//
-//   //移动的路线
-//   double movedDis = 0;
-//
-//   //直线速度
-//   final double speed = 80;
-//
-//   //转弯速度
-//   final double turnSpeed = 40;
-//
-//   //车体角度
-//   double bodyAngle = 0;
-//
-//   //炮塔角度
-//   double turretAngle = 0;
-//
-//   //车体目标角度
-//   late double targetBodyAngle;
-//
-//   //炮塔目标角度
-//   late double targetTurretAngle;
-//
-//   //tank是否存活
-//   bool isDead = false;
-//
-//   //移动到目标位置
-//   late Offset targetOffset;
-//
-//   final double ration = 0.7;
-//
-//   ///获取炮弹发射位置
-//   Offset getBulletOffset();
-//
-//   double getBulletAngle();
-// }

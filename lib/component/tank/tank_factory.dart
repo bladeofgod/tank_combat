@@ -158,7 +158,7 @@ class TankModel {
 
   ///活动范围
   /// * 一般是地图尺寸
-  final Size activeSize;
+  Size activeSize;
 
 }
 

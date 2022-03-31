@@ -9,13 +9,10 @@ import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 import 'package:tankcombat/component/background/background.dart';
 import 'package:tankcombat/component/explosion/explosion.dart';
-import 'package:tankcombat/component/tank/bullet.dart';
-import 'package:tankcombat/component/tank/enemy/green_tank.dart';
-import 'package:tankcombat/component/tank/enemy/sand_tank.dart';
-import 'package:tankcombat/component/tank/enemy/tank_model.dart';
 import 'package:tankcombat/component/tank/tank.dart';
 import 'package:tankcombat/observer/game_observer.dart';
 
+import '../component/tank/bullet.dart';
 import '../controller/controller_listener.dart';
 
 class TankGame extends FlameGame with TankController{
@@ -32,7 +29,7 @@ class TankGame extends FlameGame with TankController{
   Tank? tank;
 
   //炮弹
-  List<Bullet> bullets = [];
+  List<BaseBullet> bullets = [];
   //绿色炮弹数量
   int greenBulletNum = 0;
   //黄色炮弹数量
@@ -55,20 +52,23 @@ class TankGame extends FlameGame with TankController{
 
   @override
   void onGameResize(Vector2 canvasSize) {
-    screenSize = Size(canvasSize.storage.first, canvasSize.storage.last);
+    screenSize = canvasSize.toSize();
     bg.onGameResize(canvasSize);
     if(tank == null){
       tank = Tank(
         this,position: Offset(screenSize.width/2,screenSize.height/2),
       );
     }
+
+    bullets.forEach((element) => element.onGameResize(canvasSize));
+
     super.onGameResize(canvasSize);
   }
 
   @override
   void render(Canvas canvas) {
     //绘制草坪
-    bg?.render(canvas);
+    bg.render(canvas);
     //tank
     tank?.render(canvas);
     //bullet
