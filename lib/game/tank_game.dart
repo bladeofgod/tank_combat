@@ -3,8 +3,10 @@
 * Date : 2020/7/30
 */
 
+import 'dart:math';
 import 'dart:ui';
 
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 import 'package:tankcombat/component/background/background.dart';
@@ -12,6 +14,7 @@ import 'package:tankcombat/component/explosion/explosion.dart';
 import 'package:tankcombat/component/tank/enemy/tank_model.dart';
 import 'package:tankcombat/component/tank/tank.dart';
 import 'package:tankcombat/observer/game_observer.dart';
+import 'package:tankcombat/utils/computer_timer.dart';
 import '../utils/extension.dart';
 
 import '../component/tank/bullet.dart';
@@ -19,10 +22,11 @@ import '../component/tank/tank_factory.dart';
 import '../controller/controller_listener.dart';
 import 'game_action.dart';
 
-class TankGame extends FlameGame with BulletTheater, TankTheater{
+class TankGame extends FlameGame with BulletTheater, TankTheater, ComputerTimer{
 
-  TankGame(){
+  TankGame() {
     observer = GameObserver(this);
+    setTimerListener(this);
   }
 
   late Size screenSize;
@@ -125,7 +129,7 @@ class TankGame extends FlameGame with BulletTheater, TankTheater{
 
 }
 
-mixin TankTheater on FlameGame, BulletTheater implements TankController{
+mixin TankTheater on FlameGame, BulletTheater implements TankController, ComputerTimerListener{
 
   PlayerTank? player;
 
@@ -167,6 +171,12 @@ mixin TankTheater on FlameGame, BulletTheater implements TankController{
 
     computers.add(TankFactory.buildSandTank(sandBuilder.build(), Offset(bgSize.width-100,100)));
     computers.add(TankFactory.buildSandTank(sandBuilder.build(), Offset(bgSize.width-100, bgSize.height*0.8)));
+  }
+
+  @override
+  void onFireTimerTrigger() {
+    computers.shuffle();
+    computers.forEach(computerTankFire);
   }
 
   @override
@@ -225,12 +235,12 @@ mixin TankTheater on FlameGame, BulletTheater implements TankController{
 
 
 mixin BulletTheater on FlameGame implements ComputerTankAction{
-
-  ///电脑炮弹最大数量
-  ///绿色炮弹数量
-  final int maxGreenBulletNum = 10;
-  ///黄色炮弹数量
-  final int maxSandBulletNum = 10;
+  //
+  // ///电脑炮弹最大数量
+  // ///绿色炮弹数量
+  // final int maxGreenBulletNum = 10;
+  // ///黄色炮弹数量
+  // final int maxSandBulletNum = 10;
 
   ///玩家炮弹最大数量
   final int maxPlayerBulletNum = 20;
@@ -248,7 +258,8 @@ mixin BulletTheater on FlameGame implements ComputerTankAction{
 
   @override
   void computerTankFire(TankFireHelper helper) {
-    if(computerBullets.length < (maxGreenBulletNum + ))
+    //todo 间隔 x ms发射
+
   }
 
   @override
@@ -272,6 +283,9 @@ mixin BulletTheater on FlameGame implements ComputerTankAction{
 
 
 }
+
+
+
 
 
 

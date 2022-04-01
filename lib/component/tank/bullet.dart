@@ -39,6 +39,15 @@ class ComputerBullet extends BaseBullet{
     _sprite = await Sprite.load(spritePath);
   }
 
+  @override
+  ComputerBullet copyWith({int? tankId, Size? activeSize, Offset? position, double? angle, BulletStatus status = BulletStatus.none}) {
+    final ComputerBullet pb = ComputerBullet(this.spritePath, tankId: tankId ?? this.tankId, activeSize: activeSize ?? this.activeSize);
+    pb.position = position ?? Offset.zero;
+    pb.angle = angle ?? 0;
+    pb.status = status;
+    return pb;
+  }
+
 }
 
 
@@ -62,6 +71,15 @@ class PlayerBullet extends BaseBullet{
     _sprite = await Sprite.load('tank/bullet_blue.webp');
   }
 
+  @override
+  PlayerBullet copyWith({int? tankId, Size? activeSize, Offset? position, double? angle, BulletStatus status = BulletStatus.none}) {
+    final PlayerBullet pb = PlayerBullet(tankId: tankId ?? this.tankId, activeSize: activeSize ?? this.activeSize);
+    pb.position = position ?? Offset.zero;
+    pb.angle = angle ?? 0;
+    pb.status = status;
+    return pb;
+  }
+
 }
 
 
@@ -80,6 +98,14 @@ abstract class BaseBullet implements WindowComponent{
   }) {
     init();
   }
+
+  BaseBullet copyWith({
+    int? tankId,
+    Size? activeSize,
+    Offset? position,
+    double? angle,
+    BulletStatus status = BulletStatus.none,
+  });
 
   ///隶属于的tank
   final int tankId;

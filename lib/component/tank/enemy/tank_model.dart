@@ -86,16 +86,19 @@ class ComputerTank extends DefaultTank {
   }
 
   @override
-  BaseBullet getBullet() => bullet;
+  BaseBullet getBullet() => bullet.copyWith(position: getBulletFirePosition(), angle: getBulletFireAngle());
 }
 
 ///玩家
 class PlayerTank extends DefaultTank {
   PlayerTank({required int id, required Offset birthPosition, required TankModel config})
-      : super(id: id, birthPosition: birthPosition, config: config);
+      : bullet = PlayerBullet(tankId: id, activeSize: config.activeSize),
+        super(id: id, birthPosition: birthPosition, config: config);
+
+  final PlayerBullet bullet;
 
   @override
-  BaseBullet getBullet() => PlayerBullet(tankId: id, activeSize: config.activeSize);
+  BaseBullet getBullet() => bullet.copyWith(position: getBulletFirePosition(), angle: getBulletFireAngle());
 }
 
 abstract class DefaultTank extends BaseTank implements WindowComponent {
