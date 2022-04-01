@@ -3,8 +3,10 @@
 * Date : 2020/7/30
 */
 
+
 import 'dart:math';
 import 'dart:ui';
+
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -186,6 +188,7 @@ mixin TankTheater on FlameGame, BulletTheater implements TankController, Compute
     }
     if(computers.isEmpty) {
       initEnemyTank();
+      computers.forEach((element) => element.deposit());
     }
     player?.onGameResize(canvasSize);
     computers.onGameResize(canvasSize);
@@ -204,6 +207,7 @@ mixin TankTheater on FlameGame, BulletTheater implements TankController, Compute
     player?.update(dt);
     computers.update(dt);
     super.update(dt);
+    computers.removeWhere((element) => element.isDead);
   }
 
   @override
@@ -235,12 +239,8 @@ mixin TankTheater on FlameGame, BulletTheater implements TankController, Compute
 
 
 mixin BulletTheater on FlameGame implements ComputerTankAction{
-  //
-  // ///电脑炮弹最大数量
-  // ///绿色炮弹数量
-  // final int maxGreenBulletNum = 10;
-  // ///黄色炮弹数量
-  // final int maxSandBulletNum = 10;
+
+  final BulletTrigger trigger = BulletTrigger();
 
   ///玩家炮弹最大数量
   final int maxPlayerBulletNum = 20;
@@ -258,19 +258,22 @@ mixin BulletTheater on FlameGame implements ComputerTankAction{
 
   @override
   void computerTankFire(TankFireHelper helper) {
-    //todo 间隔 x ms发射
-
+    trigger.chargeLoading(() {
+      computerBullets.add(helper.getBullet());
+    });
   }
 
   @override
   void onGameResize(Vector2 canvasSize) {
     computerBullets.onGameResize(canvasSize);
+    playerBullets.onGameResize(canvasSize);
     super.onGameResize(canvasSize);
   }
 
   @override
   void render(Canvas canvas) {
     computerBullets.render(canvas);
+    playerBullets.render(canvas);
     super.render(canvas);
   }
 
@@ -278,11 +281,15 @@ mixin BulletTheater on FlameGame implements ComputerTankAction{
   @override
   void update(double dt) {
     computerBullets.update(dt);
+    playerBullets.update(dt);
     super.update(dt);
+    computerBullets.removeWhere((element) => element.dismissible);
   }
 
 
 }
+
+
 
 
 

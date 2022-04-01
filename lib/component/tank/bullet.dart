@@ -8,6 +8,8 @@ import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 import 'package:tankcombat/component/base_component.dart';
 import 'package:tankcombat/game/tank_game.dart';
+import 'dart:async' as async;
+import 'dart:collection';
 
 class ComputerBullet extends BaseBullet{
 
@@ -166,6 +168,29 @@ abstract class BaseBullet implements WindowComponent{
     if(!activeSize.contains(position)) {
       status = BulletStatus.outOfBorder;
     }
+  }
+
+}
+
+class BulletTrigger{
+
+  BulletTrigger() {
+    trigger = async.Timer.periodic(const Duration(milliseconds: 100), _onTick);
+  }
+
+  final Queue<Function> _task = Queue();
+
+  late final async.Timer trigger;
+
+  void _onTick(async.Timer timer) {
+    if(_task.isEmpty)
+      return;
+    final Function t = _task.removeFirst();
+    t.call();
+  }
+
+  void chargeLoading(Function b) {
+    _task.add(b);
   }
 
 }
