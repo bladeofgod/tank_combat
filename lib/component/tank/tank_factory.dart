@@ -49,7 +49,12 @@ abstract class ComputerTankSpawnerTrigger {
 class ComputerTankSpawner<T extends DefaultTank> {
   List<ComputerTankFlowLine> spawners = [];
 
+  ///生成器初始化完成
   bool standby = false;
+
+  ///构建中
+  /// * 将会影响是否相应tank生成
+  bool building = false;
 
   void warmUp(Size bgSize) {
     if (standby) {
@@ -66,12 +71,25 @@ class ComputerTankSpawner<T extends DefaultTank> {
   }
 
   void fastSpawn(List<T> plaza) {
-    plaza.addAll(spawners.map<T>((e) => e.spawnTank()).toList());
+    plaza.addAll(spawners.map<T>((e) => e.spawnTank()..deposit()).toList());
   }
 
   void randomSpan(List<T> plaza) {
-    spawners.shuffle();
-    plaza.add(spawners.first.spawnTank());
+    if(building) {
+      return;
+    }
+    building = true;
+    _startSpawn(() {
+      spawners.shuffle();
+      plaza.add(spawners.first.spawnTank()..deposit());
+      building = false;
+    });
+  }
+
+  void _startSpawn(Function task) {
+    Future.delayed(const Duration(milliseconds: 1500)).then((value) {
+      task();
+    });
   }
 
 }

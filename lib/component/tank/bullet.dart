@@ -135,6 +135,10 @@ abstract class BaseBullet implements WindowComponent{
   ///可移除的子弹
   bool get dismissible => status.index > 1;
 
+  void hit() {
+    status = BulletStatus.hit;
+  }
+
   Future<void> loadSprite();
 
   void init() async {

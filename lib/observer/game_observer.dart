@@ -9,17 +9,14 @@ import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 
 import 'package:flutter/cupertino.dart';
-import 'package:tankcombat/component/explosion/explosion.dart';
+import 'package:tankcombat/component/explosion/decoration_theater.dart';
 import 'package:tankcombat/game/tank_game.dart';
 
 enum TankCate{
   GreenTank,SandTank
 }
 
-mixin GameObserver on FlameGame, TankTheater{
-
-
-  bool isGenerating = false;
+mixin GameObserver on FlameGame, TankTheater, DecorationTheater{
 
   @override
   void update(double dt) {
@@ -28,106 +25,32 @@ mixin GameObserver on FlameGame, TankTheater{
   }
 
   void watching(double t) async {
-    if(!isGenerating){
-      if(game.gTanks.length<2){
-        isGenerating = true;
-        coolDown(() async {
-          await spawnTank(TankCate.GreenTank);
-        });
-        return;
-      }
-      if(game.sTanks.length<2){
-        isGenerating = true;
-        coolDown(() async {
-          await spawnTank(TankCate.SandTank);
-        });
-        return;
-      }
+    if(computers.length < 4) {
+      randomSpanTank();
     }
     ///check hit
     checkHit();
   }
 
-
-
-  Future spawnTank(TankCate tankCate) async {
-    switch(tankCate){
-      case TankCate.GreenTank:
-        var turretSprite = await Sprite.load('tank/t_turret_green.webp');
-        var bodySprite= await Sprite.load('tank/t_body_green.webp');
-        double r = Random().nextDouble();
-        game.gTanks.add( GreenTank(game,bodySprite,turretSprite,
-              r < 0.5 ? Offset(100,100)
-                  :Offset(100,game.screenSize.height*0.8)));
-        break;
-      case TankCate.SandTank:
-        var turretSprite = await Sprite.load('tank/t_turret_sand.webp');
-        var bodySprite= await Sprite.load('tank/t_body_sand.webp');
-        double r = Random().nextDouble();
-        game.sTanks.add( SandTank(game,bodySprite,turretSprite,
-            r < 0.5 ? Offset(game.screenSize.width-100,100)
-                :Offset(game.screenSize.width-100,game.screenSize.height*0.8)));
-        break;
-    }
-    isGenerating = false;
-  }
-
-  void coolDown(Function task) {
-    Future.delayed(Duration(milliseconds: 1500)).then((value) {
-      if(task != null){
-        task();
-      }
-    });
-  }
-
-
-
-  double hitDistance = 10;
+  ///命中距离
+  /// * 车身位置和炮弹位置小于10 算命中
+  final double hitDistance = 10;
 
   ///检查是否有tank被击中
   void checkHit() {
-    game.bullets.forEach((bullet) {
-      switch(bullet.bulletColor){
-        //玩家对敌军
-        case BulletColor.BLUE:
-          game.gTanks.forEach((gt) {
-
-            Offset zone =gt.position - bullet.position;
-
-            if(zone.distance < hitDistance){
-              //hit
-              gt.isDead = true;
-              bullet.isHit = true;
-              //添加爆炸
-              addExplosion(gt.position);
-            }
-          });
-          game.sTanks.forEach((st) {
-            Offset zone =st.position - bullet.position;
-            if(zone.distance < hitDistance){
-              st.isDead = true;
-              bullet.isHit = true;
-              addExplosion(st.position);
-            }
-          });
-          break;
-
-          ///敌军对玩家
-        ///暂时不写了，打不过 ...
-        case BulletColor.GREEN:
-
-          break;
-        case BulletColor.SAND:
-          // TODO: Handle this case.
-          break;
-      }
+    playerBullets.forEach((bullet) {
+      computers.forEach((c) {
+        final Offset hitZone = c.position - bullet.position;
+        if(hitZone.distance < hitDistance) {
+          c.isDead = true;
+          bullet.hit();
+          addExplosions(c.position);
+        }
+      });
     });
+    //todo 玩家无敌
+    //computerBullets.forEach((element) { });
   }
-
-  void addExplosion(Offset position){
-    game.explosions.add(OrangeExplosion(game, position));
-  }
-
 
 }
 

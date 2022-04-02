@@ -7,12 +7,9 @@
 import 'dart:math';
 import 'dart:ui';
 
-
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/sprite.dart';
-import 'package:tankcombat/component/background/background.dart';
-import 'package:tankcombat/component/explosion/explosion.dart';
+import 'package:tankcombat/component/explosion/decoration_theater.dart';
 import 'package:tankcombat/component/tank/enemy/tank_model.dart';
 import 'package:tankcombat/component/tank/tank.dart';
 import 'package:tankcombat/observer/game_observer.dart';
@@ -24,108 +21,29 @@ import '../component/tank/tank_factory.dart';
 import '../controller/controller_listener.dart';
 import 'game_action.dart';
 
-class TankGame extends FlameGame with BulletTheater, TankTheater, ComputerTimer{
+class TankGame extends FlameGame with BulletTheater, TankTheater, ComputerTimer, DecorationTheater, GameObserver{
 
   TankGame() {
-    observer = GameObserver(this);
     setTimerListener(this);
   }
 
   late Size screenSize;
 
-  final BattleBackground bg = BattleBackground();
-
-
-  //敌方tank
-  //分开，也许需要特殊处理
-  List<GreenTank> gTanks = [];
-  List<SandTank> sTanks = [];
-
-  //爆炸动画
-  List<OrangeExplosion> explosions = [];
-
-
-
   @override
   void onGameResize(Vector2 canvasSize) {
     screenSize = canvasSize.toSize();
-    bg.onGameResize(canvasSize);
-    if(tank == null){
-      tank = Tank(
-        this,position: Offset(screenSize.width/2,screenSize.height/2),
-      );
-    }
-
     super.onGameResize(canvasSize);
   }
 
   @override
   void render(Canvas canvas) {
-    //绘制草坪
-    bg.render(canvas);
-    //tank
-    tank?.render(canvas);
-    //bullet
-    bullets.forEach((element) {
-      element.render(canvas);
-    });
-    //enemy
-    gTanks.forEach((element) {
-      element.render(canvas);
-    });
-    sTanks.forEach((element) {
-      element.render(canvas);
-    });
-    //爆炸
-    explosions.forEach((element) {element.render(canvas);});
     super.render(canvas);
   }
 
   @override
   void update(double t) {
-    if(screenSize == null)return;
-    tank?.update(t);
-    gTanks.forEach((element) {
-      element.update(t);
-    });
-    sTanks.forEach((element) {
-      element.update(t);
-    });
-    blueBulletNum = 0;
-    greenBulletNum = 0;
-    sandBulletNum = 0;
-    bullets.forEach((element) {
-      switch(element.bulletColor){
-
-        case BulletColor.BLUE:
-          blueBulletNum ++;
-          break;
-        case BulletColor.GREEN:
-          greenBulletNum ++;
-          break;
-        case BulletColor.SAND:
-          sandBulletNum ++;
-          break;
-      }
-      element.update(t);
-    });
-    //移除飞出屏幕的
-    bullets.removeWhere((element) => element.isHit || element.isOffScreen);
-    //移除死亡tank
-    gTanks.removeWhere((element) => element.isDead);
-    sTanks.removeWhere((element) => element.isDead);
-
-    //移除爆炸
-    explosions.removeWhere((element) => element.playDone);
-    //爆炸
-    explosions.forEach((element) {element.update(t);});
-
-    observer.watching(t);
-
+    super.update(t);
   }
-
-
-
 
 }
 
@@ -154,6 +72,10 @@ mixin TankTheater on FlameGame, BulletTheater implements TankController, Compute
   /// * 一般情况下是在游戏伊始时执行。
   void initEnemyTank() {
     _computerSpawner.fastSpawn(computers);
+  }
+
+  void randomSpanTank() {
+    _computerSpawner.randomSpan(computers);
   }
 
 
@@ -223,6 +145,7 @@ mixin TankTheater on FlameGame, BulletTheater implements TankController, Compute
 
 mixin BulletTheater on FlameGame implements ComputerTankAction{
 
+  ///电脑tank的开火器
   final BulletTrigger trigger = BulletTrigger();
 
   ///玩家炮弹最大数量
