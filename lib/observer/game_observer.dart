@@ -5,26 +5,27 @@
 
 import 'dart:math';
 
+import 'package:flame/game.dart';
 import 'package:flame/sprite.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:tankcombat/component/explosion/explosion.dart';
-import 'package:tankcombat/component/tank/bullet.dart';
-import 'package:tankcombat/component/tank/enemy/green_tank.dart';
-import 'package:tankcombat/component/tank/enemy/sand_tank.dart';
 import 'package:tankcombat/game/tank_game.dart';
 
 enum TankCate{
   GreenTank,SandTank
 }
 
-class GameObserver{
+mixin GameObserver on FlameGame, TankTheater{
 
-  final TankGame game;
-
-  GameObserver(this.game);
 
   bool isGenerating = false;
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    watching(dt);
+  }
 
   void watching(double t) async {
     if(!isGenerating){

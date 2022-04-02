@@ -44,8 +44,6 @@ class TankGame extends FlameGame with BulletTheater, TankTheater, ComputerTimer{
   //爆炸动画
   List<OrangeExplosion> explosions = [];
 
-  late GameObserver observer;
-
 
 
   @override
@@ -133,6 +131,8 @@ class TankGame extends FlameGame with BulletTheater, TankTheater, ComputerTimer{
 
 mixin TankTheater on FlameGame, BulletTheater implements TankController, ComputerTimerListener{
 
+  ComputerTankSpawner _computerSpawner = ComputerTankSpawner();
+
   PlayerTank? player;
 
   final List<ComputerTank> computers = [];
@@ -151,29 +151,11 @@ mixin TankTheater on FlameGame, BulletTheater implements TankController, Compute
   }
 
   ///初始化敌军
+  /// * 一般情况下是在游戏伊始时执行。
   void initEnemyTank() {
-
-    final Size bgSize = canvasSize.toSize();
-
-    final TankModelBuilder greenBuilder = TankModelBuilder(
-        id: DateTime.now().millisecondsSinceEpoch,
-        bodySpritePath: 'tank/t_body_green.webp',
-      turretSpritePath: 'tank/t_turret_green.webp',
-      activeSize: bgSize);
-
-    computers.add(TankFactory.buildGreenTank(greenBuilder.build(), const Offset(100,100)));
-    computers.add(TankFactory.buildGreenTank(greenBuilder.build(), Offset(100, bgSize.height*0.8)));
-
-
-    final TankModelBuilder sandBuilder = TankModelBuilder(
-        id: DateTime.now().millisecondsSinceEpoch,
-        bodySpritePath: 'tank/t_body_sand.webp',
-        turretSpritePath: 'tank/t_turret_sand.webp',
-        activeSize: bgSize);
-
-    computers.add(TankFactory.buildSandTank(sandBuilder.build(), Offset(bgSize.width-100,100)));
-    computers.add(TankFactory.buildSandTank(sandBuilder.build(), Offset(bgSize.width-100, bgSize.height*0.8)));
+    _computerSpawner.fastSpawn(computers);
   }
+
 
   @override
   void onFireTimerTrigger() {
@@ -187,6 +169,7 @@ mixin TankTheater on FlameGame, BulletTheater implements TankController, Compute
       initPlayer();
     }
     if(computers.isEmpty) {
+      _computerSpawner.warmUp(canvasSize.toSize());
       initEnemyTank();
       computers.forEach((element) => element.deposit());
     }

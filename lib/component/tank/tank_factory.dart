@@ -1,42 +1,102 @@
 import 'dart:ui';
 
-import 'package:tankcombat/component/tank/bullet.dart';
 import 'package:tankcombat/component/tank/enemy/tank_model.dart';
 
 /// 作者：李佳奇
 /// 日期：2022/3/28
-/// 备注：工厂、builder及tank模型
+/// 备注：工厂、builder,tank-generator及tank模型
 
-class TankFactory{
+class GreenTankFlowLine extends ComputerTankFlowLine {
+  GreenTankFlowLine(Offset depositPosition, Size activeSize) : super(depositPosition, activeSize);
 
+  @override
+  T spawnTank<T extends DefaultTank>() {
+    final TankModelBuilder greenBuilder = TankModelBuilder(
+        id: DateTime.now().millisecondsSinceEpoch,
+        bodySpritePath: 'tank/t_body_green.webp',
+        turretSpritePath: 'tank/t_turret_green.webp',
+        activeSize: activeSize);
+    return TankFactory.buildGreenTank(greenBuilder.build(), depositPosition) as T;
+  }
+}
+
+class SandTankFlowLine extends ComputerTankFlowLine {
+  SandTankFlowLine(Offset depositPosition, Size activeSize) : super(depositPosition, activeSize);
+
+  @override
+  T spawnTank<T extends DefaultTank>() {
+    final TankModelBuilder sandBuilder = TankModelBuilder(
+        id: DateTime.now().millisecondsSinceEpoch,
+        bodySpritePath: 'tank/t_body_sand.webp',
+        turretSpritePath: 'tank/t_turret_sand.webp',
+        activeSize: activeSize);
+    return TankFactory.buildSandTank(sandBuilder.build(), depositPosition) as T;
+  }
+}
+
+abstract class ComputerTankFlowLine implements ComputerTankSpawnerTrigger {
+  ComputerTankFlowLine(this.depositPosition, this.activeSize);
+
+  final Size activeSize;
+
+  final Offset depositPosition;
+}
+
+abstract class ComputerTankSpawnerTrigger {
+  T spawnTank<T extends DefaultTank>();
+}
+
+class ComputerTankSpawner<T extends DefaultTank> {
+  List<ComputerTankFlowLine> spawners = [];
+
+  bool standby = false;
+
+  void warmUp(Size bgSize) {
+    if (standby) {
+      return;
+    }
+    standby = true;
+
+    spawners.addAll([
+      GreenTankFlowLine(const Offset(100, 100), bgSize),
+      GreenTankFlowLine(Offset(100, bgSize.height * 0.8), bgSize),
+      SandTankFlowLine(Offset(bgSize.width - 100, 100), bgSize),
+      SandTankFlowLine(Offset(bgSize.width - 100, bgSize.height * 0.8), bgSize)
+    ]);
+  }
+
+  void fastSpawn(List<T> plaza) {
+    plaza.addAll(spawners.map<T>((e) => e.spawnTank()).toList());
+  }
+
+  void randomSpan(List<T> plaza) {
+    spawners.shuffle();
+    plaza.add(spawners.first.spawnTank());
+  }
+
+}
+
+class TankFactory {
   static PlayerTank buildPlayerTank(TankModel model, Offset birthPosition) {
-    return PlayerTank(
-        id: model.id,
-        birthPosition: birthPosition,
-        config: model);
+    return PlayerTank(id: model.id, birthPosition: birthPosition, config: model);
   }
 
   static ComputerTank buildGreenTank(TankModel model, Offset birthPosition) {
     return ComputerTank.green(id: model.id, birthPosition: birthPosition, config: model);
   }
 
-
   static ComputerTank buildSandTank(TankModel model, Offset birthPosition) {
     return ComputerTank.sand(id: model.id, birthPosition: birthPosition, config: model);
   }
-
-
 }
 
-
-class TankModelBuilder{
-
+class TankModelBuilder {
   TankModelBuilder({
     required this.id,
     required this.bodySpritePath,
     required this.turretSpritePath,
     required this.activeSize,
-});
+  });
 
   final int id;
 
@@ -103,41 +163,37 @@ class TankModelBuilder{
     turnSpeed = s;
   }
 
-
   TankModel build() {
-    return TankModel(id: id,
-        bodySpritePath: bodySpritePath,
-        turretSpritePath: turretSpritePath,
-        ratio: ratio,
-        speed: speed,
-        turnSpeed: turnSpeed,
-        bodyWidth: bodyWidth,
-        bodyHeight: bodyHeight,
-        turretWidth: turretWidth,
-        turretHeight: turretHeight,
-        activeSize: activeSize,
+    return TankModel(
+      id: id,
+      bodySpritePath: bodySpritePath,
+      turretSpritePath: turretSpritePath,
+      ratio: ratio,
+      speed: speed,
+      turnSpeed: turnSpeed,
+      bodyWidth: bodyWidth,
+      bodyHeight: bodyHeight,
+      turretWidth: turretWidth,
+      turretHeight: turretHeight,
+      activeSize: activeSize,
     );
-
   }
-
 }
-
 
 ///坦克基础模型
 class TankModel {
-  TankModel({
-    required this.id,
-    required this.bodySpritePath,
-    required this.turretSpritePath,
-    required this.ratio,
-    required this.speed,
-    required this.turnSpeed,
-    required this.bodyWidth,
-    required this.bodyHeight,
-    required this.turretWidth,
-    required this.turretHeight,
-    required this.activeSize
-  });
+  TankModel(
+      {required this.id,
+      required this.bodySpritePath,
+      required this.turretSpritePath,
+      required this.ratio,
+      required this.speed,
+      required this.turnSpeed,
+      required this.bodyWidth,
+      required this.bodyHeight,
+      required this.turretWidth,
+      required this.turretHeight,
+      required this.activeSize});
 
   final int id;
 
@@ -171,21 +227,4 @@ class TankModel {
   ///活动范围
   /// * 一般是地图尺寸
   Size activeSize;
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
