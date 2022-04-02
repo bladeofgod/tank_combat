@@ -28,7 +28,8 @@ mixin ComputerTimer on FlameGame{
   @override
   void onGameResize(Vector2 canvasSize) {
     super.onGameResize(canvasSize);
-    timer ??= Timer(500, repeat: true, onTick: onTick);
+    //limit's unit : second
+    timer ??= Timer(1, repeat: true, onTick: onTick);
   }
 
   @override
