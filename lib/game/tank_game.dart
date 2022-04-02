@@ -9,6 +9,7 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:tankcombat/component/explosion/decoration_theater.dart';
 import 'package:tankcombat/component/tank/enemy/tank_model.dart';
 import 'package:tankcombat/component/tank/tank.dart';
@@ -55,7 +56,7 @@ mixin TankTheater on FlameGame, BulletTheater implements TankController, Compute
 
   final List<ComputerTank> computers = [];
 
-  void initPlayer() {
+  void initPlayer(Vector2 canvasSize) {
     final Size bgSize = canvasSize.toSize();
 
     final TankModelBuilder playerBuilder = TankModelBuilder(
@@ -66,6 +67,7 @@ mixin TankTheater on FlameGame, BulletTheater implements TankController, Compute
 
     player ??= TankFactory.buildPlayerTank(playerBuilder.build()
         , Offset(bgSize.width/2,bgSize.height/2));
+    player!.deposit();
   }
 
   ///初始化敌军
@@ -88,7 +90,7 @@ mixin TankTheater on FlameGame, BulletTheater implements TankController, Compute
   @override
   void onGameResize(Vector2 canvasSize) {
     if(player == null) {
-      initPlayer();
+      initPlayer(canvasSize);
     }
     if(computers.isEmpty) {
       _computerSpawner.warmUp(canvasSize.toSize());
@@ -190,6 +192,7 @@ mixin BulletTheater on FlameGame implements ComputerTankAction{
     playerBullets.update(dt);
     super.update(dt);
     computerBullets.removeWhere((element) => element.dismissible);
+    playerBullets.removeWhere((element) => element.dismissible);
   }
 
 

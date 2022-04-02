@@ -10,7 +10,7 @@ class GreenTankFlowLine extends ComputerTankFlowLine {
   GreenTankFlowLine(Offset depositPosition, Size activeSize) : super(depositPosition, activeSize);
 
   @override
-  T spawnTank<T extends DefaultTank>() {
+  T spawnTank<T extends ComputerTank>() {
     final TankModelBuilder greenBuilder = TankModelBuilder(
         id: DateTime.now().millisecondsSinceEpoch,
         bodySpritePath: 'tank/t_body_green.webp',
@@ -24,7 +24,7 @@ class SandTankFlowLine extends ComputerTankFlowLine {
   SandTankFlowLine(Offset depositPosition, Size activeSize) : super(depositPosition, activeSize);
 
   @override
-  T spawnTank<T extends DefaultTank>() {
+  T spawnTank<T extends ComputerTank>() {
     final TankModelBuilder sandBuilder = TankModelBuilder(
         id: DateTime.now().millisecondsSinceEpoch,
         bodySpritePath: 'tank/t_body_sand.webp',
@@ -43,10 +43,10 @@ abstract class ComputerTankFlowLine implements ComputerTankSpawnerTrigger {
 }
 
 abstract class ComputerTankSpawnerTrigger {
-  T spawnTank<T extends DefaultTank>();
+  T spawnTank<T extends ComputerTank>();
 }
 
-class ComputerTankSpawner<T extends DefaultTank> {
+class ComputerTankSpawner<T extends ComputerTank> {
   List<ComputerTankFlowLine> spawners = [];
 
   ///生成器初始化完成

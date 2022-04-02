@@ -54,16 +54,14 @@ class ComputerTank extends DefaultTank {
   double movedDis = 0;
 
   void generateNewTarget() {
-    Future.delayed(const Duration(seconds: 1), () {
-      final double x = random.nextDouble().clamp(activeBorderLow, activeBorderUp) * config.activeSize.width;
-      final double y = random.nextDouble().clamp(activeBorderLow, activeBorderUp) * config.activeSize.height;
+    final double x = random.nextDouble().clamp(activeBorderLow, activeBorderUp) * config.activeSize.width;
+    final double y = random.nextDouble().clamp(activeBorderLow, activeBorderUp) * config.activeSize.height;
 
-      targetOffset = Offset(x, y);
+    targetOffset = Offset(x, y);
 
-      final Offset vector = targetOffset - position;
-      targetBodyAngle = vector.direction;
-      targetTurretAngle = vector.direction;
-    });
+    final Offset vector = targetOffset - position;
+    targetBodyAngle = vector.direction;
+    targetTurretAngle = vector.direction;
   }
 
   @override
@@ -76,7 +74,7 @@ class ComputerTank extends DefaultTank {
   void move(double t) {
     if (targetBodyAngle != null) {
       movedDis += speed * t;
-      if (movedDis > maxMovedDistance) {
+      if (movedDis < maxMovedDistance) {
         super.move(t);
       } else {
         movedDis = 0;
