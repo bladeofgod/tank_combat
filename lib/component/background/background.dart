@@ -10,7 +10,7 @@ import 'package:tankcombat/component/base_component.dart';
 import 'package:tankcombat/game/tank_game.dart';
 import 'package:vector_math/vector_math_64.dart';
 
-class BattleBackground implements WindowComponent {
+class BattleBackground extends WindowComponent {
 
   BattleBackground() {
     init();

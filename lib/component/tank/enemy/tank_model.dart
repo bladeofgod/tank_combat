@@ -99,7 +99,7 @@ class PlayerTank extends DefaultTank {
   BaseBullet getBullet() => bullet.copyWith(position: getBulletFirePosition(), angle: getBulletFireAngle());
 }
 
-abstract class DefaultTank extends BaseTank implements WindowComponent {
+abstract class DefaultTank extends BaseTank {
   DefaultTank({
     required int id,
     required Offset birthPosition,
@@ -272,7 +272,7 @@ abstract class TankFireHelper {
   BaseBullet getBullet();
 }
 
-abstract class BaseTank implements TankFireHelper {
+abstract class BaseTank extends WindowComponent implements TankFireHelper {
   BaseTank({
     required int id,
     required this.config,

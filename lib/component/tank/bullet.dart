@@ -92,7 +92,7 @@ enum BulletStatus{
   outOfBorder, //飞出边界
 }
 
-abstract class BaseBullet implements WindowComponent{
+abstract class BaseBullet extends WindowComponent{
 
   BaseBullet({
     required this.tankId,

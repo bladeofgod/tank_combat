@@ -7,18 +7,9 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-//todo 替代为 PositionComponent
-abstract class BaseComponent{
+///todo 一些绘制位置计算在 PositionComponent是封装好，
+///      实际使用时，应按照Flame的文档继承PositionComponent
 
-  void render(Canvas canvas);
-
-  void update(double t);
-
-}
-
-
-abstract class WindowComponent extends BaseComponent{
-
-  void onGameResize(Vector2 canvasSize);
+abstract class WindowComponent extends Component{
 
 }

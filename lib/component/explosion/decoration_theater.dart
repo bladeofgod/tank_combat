@@ -46,7 +46,7 @@ mixin DecorationTheater on FlameGame{
 }
 
 
-class OrangeExplosion implements WindowComponent{
+class OrangeExplosion extends WindowComponent{
 
   OrangeExplosion(this.position) : exRect = Rect.fromCenter(center: position,width: 30,height: 30) {
     loadSprite();
