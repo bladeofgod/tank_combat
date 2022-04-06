@@ -1,15 +1,11 @@
 
-/*
-* Author : LiJiqqi
-* Date : 2020/7/30
-*/
-
 import 'dart:ui';
 
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:tankcombat/component/explosion/decoration_theater.dart';
-import 'package:tankcombat/component/tank/enemy/tank_model.dart';
+import 'package:tankcombat/component/tank/tank_model.dart';
 import 'package:tankcombat/observer/game_observer.dart';
 import 'package:tankcombat/utils/computer_timer.dart';
 import '../utils/extension.dart';
@@ -19,17 +15,19 @@ import '../component/tank/tank_factory.dart';
 import '../controller/controller_listener.dart';
 import 'game_action.dart';
 
+
+///游戏入口
+/// * 继承于[FlameGame]
+/// * 所混入的类 : [BulletTheater]、[TankTheater]、[ComputerTimer]、[DecorationTheater]、[GameObserver]
+/// *           用于拓展[TankGame]的场景内容和[Sprite]交互行为，具体见各自的注释。
 class TankGame extends FlameGame with BulletTheater, TankTheater, ComputerTimer, DecorationTheater, GameObserver{
 
   TankGame() {
     setTimerListener(this);
   }
 
-  late Size screenSize;
-
   @override
   void onGameResize(Vector2 canvasSize) {
-    screenSize = canvasSize.toSize();
     super.onGameResize(canvasSize);
   }
 
@@ -45,6 +43,7 @@ class TankGame extends FlameGame with BulletTheater, TankTheater, ComputerTimer,
 
 }
 
+///负责管理玩家和电脑tank
 mixin TankTheater on FlameGame, BulletTheater implements TankController, ComputerTimerListener{
 
   ComputerTankSpawner _computerSpawner = ComputerTankSpawner();
@@ -142,6 +141,7 @@ mixin TankTheater on FlameGame, BulletTheater implements TankController, Compute
 }
 
 
+///负责坦克的开火系统
 mixin BulletTheater on FlameGame implements ComputerTankAction{
 
   ///电脑tank的开火器

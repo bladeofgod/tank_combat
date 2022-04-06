@@ -7,6 +7,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+
+///摇杆
 class JoyStick extends StatefulWidget {
   final void Function(Offset) onChange;
 
@@ -19,10 +21,10 @@ class JoyStick extends StatefulWidget {
 }
 
 class JoyStickState extends State<JoyStick> {
-  //偏移量
+  ///偏移量
   Offset delta = Offset.zero;
 
-  //更新位置
+  ///更新位置
   void updateDelta(Offset newD) {
     widget.onChange(newD);
     setState(() {
@@ -37,6 +39,7 @@ class JoyStickState extends State<JoyStick> {
   }
 
   ///遥感尺寸
+  /// * 外层大圆的直径，上层圆为1/2直径
   final double stickSize = 120;
 
   @override

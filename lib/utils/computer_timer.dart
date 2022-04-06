@@ -6,10 +6,13 @@ import 'package:flutter/foundation.dart';
 /// 日期：2022/4/1
 /// 备注：电脑计时器，用于执行一些定时性操作
 
+///电脑自动开火接口
 abstract class ComputerTimerListener{
   void onFireTimerTrigger();
 }
 
+///电脑计时器
+/// * 主要用于触发一些自动行为，如[ComputerTimerListener]自动开火。
 mixin ComputerTimer on FlameGame{
 
   Timer? timer;

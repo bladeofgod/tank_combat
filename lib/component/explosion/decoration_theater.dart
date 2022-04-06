@@ -10,6 +10,9 @@ import 'package:vector_math/vector_math_64.dart';
 
 import '../background/background.dart';
 
+
+///负责装饰性场景及衍生的[Sprite]
+/// * 如：背景、爆炸。
 mixin DecorationTheater on FlameGame{
 
   final BattleBackground bg = BattleBackground();

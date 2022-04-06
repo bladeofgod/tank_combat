@@ -4,6 +4,7 @@ import 'dart:ui';
 /// 日期：2022/3/23
 /// 备注：控制器监听器
 
+///控制接口
 abstract class DirectionControllerListener{
 
   ///车身角度变化
@@ -15,6 +16,7 @@ abstract class DirectionControllerListener{
 }
 
 
+///开火接口
 abstract class ButtonControllerListener{
 
   ///开火按钮触发
@@ -22,6 +24,8 @@ abstract class ButtonControllerListener{
 
 }
 
+
+///[DirectionControllerListener]和[ButtonControllerListener]的连接器
 abstract class TankController implements DirectionControllerListener, ButtonControllerListener {}
 
 

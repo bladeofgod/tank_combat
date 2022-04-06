@@ -10,6 +10,7 @@ import 'package:flame/sprite.dart';
 import 'package:tankcombat/component/base_component.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+///游戏背景
 class BattleBackground extends WindowComponent {
 
   BattleBackground() {

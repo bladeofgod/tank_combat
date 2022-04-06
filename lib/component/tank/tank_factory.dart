@@ -1,52 +1,68 @@
 import 'dart:ui';
 
-import 'package:tankcombat/component/tank/enemy/tank_model.dart';
+import 'package:tankcombat/component/tank/tank_model.dart';
+import 'package:tankcombat/game/tank_game.dart';
 
 /// 作者：李佳奇
 /// 日期：2022/3/28
 /// 备注：工厂、builder,tank-generator及tank模型
 
-class GreenTankFlowLine extends ComputerTankFlowLine {
+///用于生产绿色tank
+class GreenTankFlowLine extends ComputerTankFlowLine<ComputerTank> {
   GreenTankFlowLine(Offset depositPosition, Size activeSize) : super(depositPosition, activeSize);
 
   @override
-  T spawnTank<T extends ComputerTank>() {
-    final TankModelBuilder greenBuilder = TankModelBuilder(
-        id: DateTime.now().millisecondsSinceEpoch,
-        bodySpritePath: 'tank/t_body_green.webp',
-        turretSpritePath: 'tank/t_turret_green.webp',
-        activeSize: activeSize);
-    return TankFactory.buildGreenTank(greenBuilder.build(), depositPosition) as T;
+  ComputerTank spawnTank() {
+      final TankModelBuilder greenBuilder = TankModelBuilder(
+          id: DateTime.now().millisecondsSinceEpoch,
+          bodySpritePath: 'tank/t_body_green.webp',
+          turretSpritePath: 'tank/t_turret_green.webp',
+          activeSize: activeSize);
+      return TankFactory.buildGreenTank(greenBuilder.build(), depositPosition);
   }
+
 }
 
-class SandTankFlowLine extends ComputerTankFlowLine {
+///用于生产黄色tank
+class SandTankFlowLine extends ComputerTankFlowLine<ComputerTank> {
   SandTankFlowLine(Offset depositPosition, Size activeSize) : super(depositPosition, activeSize);
 
   @override
-  T spawnTank<T extends ComputerTank>() {
+  ComputerTank spawnTank() {
     final TankModelBuilder sandBuilder = TankModelBuilder(
         id: DateTime.now().millisecondsSinceEpoch,
         bodySpritePath: 'tank/t_body_sand.webp',
         turretSpritePath: 'tank/t_turret_sand.webp',
         activeSize: activeSize);
-    return TankFactory.buildSandTank(sandBuilder.build(), depositPosition) as T;
+    return TankFactory.buildSandTank(sandBuilder.build(), depositPosition);
   }
 }
 
-abstract class ComputerTankFlowLine implements ComputerTankSpawnerTrigger {
+///流水线基类
+/// * 用于生成电脑tank
+/// * 见[ComputerTankSpawner]
+abstract class ComputerTankFlowLine<T extends ComputerTank> implements ComputerTankSpawnerTrigger<T> {
   ComputerTankFlowLine(this.depositPosition, this.activeSize);
 
+  ///活动范围
   final Size activeSize;
 
+  ///部署位置
   final Offset depositPosition;
 }
 
-abstract class ComputerTankSpawnerTrigger {
-  T spawnTank<T extends ComputerTank>();
+abstract class ComputerTankSpawnerTrigger<T extends ComputerTank> {
+  T spawnTank();
 }
 
-class ComputerTankSpawner<T extends ComputerTank> {
+///电脑生成器
+/// * [TankTheater]下，tank生成的直接参与者，负责电脑的随机生成。
+///
+/// * [spawners]为具体[ComputerTank]的生成流水线，见[GreenTankFlowLine]和[SandTankFlowLine]
+///   流水线内部的[ComputerTank]产出由[TankFactory]负责。
+class ComputerTankSpawner {
+
+  ///流水线
   List<ComputerTankFlowLine> spawners = [];
 
   ///生成器初始化完成
@@ -56,6 +72,8 @@ class ComputerTankSpawner<T extends ComputerTank> {
   /// * 将会影响是否相应tank生成
   bool building = false;
 
+  ///初始化调用
+  /// * 用于配置流水线
   void warmUp(Size bgSize) {
     if (standby) {
       return;
@@ -70,11 +88,16 @@ class ComputerTankSpawner<T extends ComputerTank> {
     ]);
   }
 
-  void fastSpawn(List<T> plaza) {
-    plaza.addAll(spawners.map<T>((e) => e.spawnTank()..deposit()).toList());
+  ///快速生成tank
+  /// * 各生产线生成一辆tank
+  /// * [plaza]为接收tank对象
+  void fastSpawn(List<ComputerTank> plaza) {
+    plaza.addAll(spawners.map<ComputerTank>((e) => e.spawnTank()..deposit()).toList());
   }
 
-  void randomSpan(List<T> plaza) {
+  ///随机生成一辆tank
+  /// * [plaza]为接收tank对象
+  void randomSpan(List<ComputerTank> plaza) {
     if(building) {
       return;
     }
@@ -86,6 +109,7 @@ class ComputerTankSpawner<T extends ComputerTank> {
     });
   }
 
+  ///用于约束生产速度
   void _startSpawn(Function task) {
     Future.delayed(const Duration(milliseconds: 1500)).then((value) {
       task();
@@ -94,6 +118,7 @@ class ComputerTankSpawner<T extends ComputerTank> {
 
 }
 
+///用于构建tank
 class TankFactory {
   static PlayerTank buildPlayerTank(TankModel model, Offset birthPosition) {
     return PlayerTank(id: model.id, birthPosition: birthPosition, config: model);
@@ -108,6 +133,7 @@ class TankFactory {
   }
 }
 
+///[TankModel]构建器
 class TankModelBuilder {
   TankModelBuilder({
     required this.id,
@@ -198,7 +224,8 @@ class TankModelBuilder {
   }
 }
 
-///坦克基础模型
+///坦克基础配置模型
+/// * 由[TankModelBuilder]负责构建
 class TankModel {
   TankModel(
       {required this.id,

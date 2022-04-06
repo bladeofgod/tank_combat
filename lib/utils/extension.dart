@@ -6,9 +6,10 @@ import '../component/base_component.dart';
 
 /// 作者：李佳奇
 /// 日期：2022/3/31
-/// 备注：
+/// 备注：拓展类
 
 
+///[WindowComponent]相关list的拓展类。
 extension GameExtension<T extends WindowComponent> on List<T>{
 
   void onGameResize(Vector2 canvasSize) {

@@ -12,6 +12,7 @@ import 'package:tankcombat/component/base_component.dart';
 import 'dart:async' as async;
 import 'dart:collection';
 
+///电脑炮弹
 class ComputerBullet extends BaseBullet{
 
   factory ComputerBullet.green({required int tankId, required Size activeSize}) {
@@ -53,7 +54,7 @@ class ComputerBullet extends BaseBullet{
 
 }
 
-
+///玩家炮弹
 class PlayerBullet extends BaseBullet{
 
   PlayerBullet({required int tankId, required Size activeSize})
@@ -86,6 +87,7 @@ class PlayerBullet extends BaseBullet{
 }
 
 
+///炮弹状态
 enum BulletStatus{
   none, //初始状态
   standBy,// 准备状态： 可参与绘制
@@ -93,6 +95,8 @@ enum BulletStatus{
   outOfBorder, //飞出边界
 }
 
+
+///炮弹基类
 abstract class BaseBullet extends WindowComponent{
 
   BaseBullet({
@@ -124,10 +128,13 @@ abstract class BaseBullet extends WindowComponent{
   /// * 超出判定为失效子弹
   Size activeSize;
 
+  ///位置
   Offset position = Offset.zero;
 
+  ///速度
   double speed = 200;
 
+  ///角度
   double angle = 0;
 
   ///子弹状态
@@ -140,8 +147,10 @@ abstract class BaseBullet extends WindowComponent{
     status = BulletStatus.hit;
   }
 
+  ///加载炮弹纹理
   Future<void> loadSprite();
 
+  ///初始化炮弹
   void init() async {
     await loadSprite();
     status = BulletStatus.standBy;

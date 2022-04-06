@@ -6,8 +6,6 @@ import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tankcombat/game/tank_game.dart';
-import 'package:tankcombat/widgets/fire_button.dart';
-import 'package:tankcombat/widgets/joy_stick.dart';
 
 import 'controller/control_panel_widget.dart';
 

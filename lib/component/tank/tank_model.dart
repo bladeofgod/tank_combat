@@ -11,8 +11,8 @@ import 'package:flame/sprite.dart';
 import 'package:flutter/material.dart';
 import 'package:tankcombat/component/tank/bullet.dart';
 
-import '../../base_component.dart';
-import '../tank_factory.dart';
+import '../base_component.dart';
+import 'tank_factory.dart';
 
 ///电脑
 class ComputerTank extends DefaultTank {
@@ -100,6 +100,10 @@ class PlayerTank extends DefaultTank {
   BaseBullet getBullet() => bullet.copyWith(position: getBulletFirePosition(), angle: getBulletFireAngle());
 }
 
+
+///可实例化的tank模型
+///
+/// * [BaseTank]实例化的基准模型，不具备业务区分能力。见[PlayerTank]和[ComputerTank]
 abstract class DefaultTank extends BaseTank {
   DefaultTank({
     required int id,
@@ -271,9 +275,14 @@ abstract class TankFireHelper {
   ///获取炮弹发射角度
   double getBulletFireAngle();
 
+  ///获取tank所装配的炮弹
   BaseBullet getBullet();
 }
 
+
+///tank基础模型
+/// * 定义基础行为属性，外观属性依赖于[TankModel]
+/// * @see [TankModelBuilder]
 abstract class BaseTank extends WindowComponent implements TankFireHelper {
   BaseTank({
     required int id,

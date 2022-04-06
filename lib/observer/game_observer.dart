@@ -3,19 +3,16 @@
 * Date : 2020/7/31
 */
 
-import 'dart:math';
-
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
-import 'package:flame/sprite.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:tankcombat/component/explosion/decoration_theater.dart';
 import 'package:tankcombat/game/tank_game.dart';
 
-enum TankCate{
-  GreenTank,SandTank
-}
-
+///游戏裁判
+/// * 用于观测[Sprite]之间的交互，并触发衍生交互，
+/// * 如：是否击中、[OrangeExplosion]的触发等.
 mixin GameObserver on FlameGame, TankTheater, DecorationTheater{
 
   @override

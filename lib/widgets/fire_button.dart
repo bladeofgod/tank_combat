@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../controller/controller_listener.dart';
 
+///开火按钮
 class FireButton extends StatelessWidget {
   const FireButton({Key? key, required this.buttonControllerListener}) : super(key: key);
 
