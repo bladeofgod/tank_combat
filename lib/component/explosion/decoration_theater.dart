@@ -1,6 +1,4 @@
 
-
-
 import 'dart:ui';
 
 import 'package:flame/game.dart';
@@ -46,7 +44,7 @@ mixin DecorationTheater on FlameGame{
 }
 
 
-class OrangeExplosion implements WindowComponent{
+class OrangeExplosion extends WindowComponent{
 
   OrangeExplosion(this.position) : exRect = Rect.fromCenter(center: position,width: 30,height: 30) {
     loadSprite();
@@ -103,29 +101,10 @@ class OrangeExplosion implements WindowComponent{
 
   @override
   void onGameResize(Vector2 canvasSize) {
+    super.onGameResize(canvasSize);
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

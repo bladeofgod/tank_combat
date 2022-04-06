@@ -1,18 +1,15 @@
+
 /*
 * Author : LiJiqqi
 * Date : 2020/7/30
 */
 
-
-import 'dart:math';
 import 'dart:ui';
 
-import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:tankcombat/component/explosion/decoration_theater.dart';
 import 'package:tankcombat/component/tank/enemy/tank_model.dart';
-import 'package:tankcombat/component/tank/tank.dart';
 import 'package:tankcombat/observer/game_observer.dart';
 import 'package:tankcombat/utils/computer_timer.dart';
 import '../utils/extension.dart';
@@ -197,28 +194,4 @@ mixin BulletTheater on FlameGame implements ComputerTankAction{
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

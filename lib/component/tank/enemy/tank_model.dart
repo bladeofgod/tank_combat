@@ -1,3 +1,4 @@
+
 /*
 * Author : LiJiqqi
 * Date : 2020/7/31
@@ -99,7 +100,7 @@ class PlayerTank extends DefaultTank {
   BaseBullet getBullet() => bullet.copyWith(position: getBulletFirePosition(), angle: getBulletFireAngle());
 }
 
-abstract class DefaultTank extends BaseTank implements WindowComponent {
+abstract class DefaultTank extends BaseTank {
   DefaultTank({
     required int id,
     required Offset birthPosition,
@@ -114,6 +115,7 @@ abstract class DefaultTank extends BaseTank implements WindowComponent {
   @override
   void onGameResize(Vector2 canvasSize) {
     config.activeSize = canvasSize.toSize();
+    super.onGameResize(canvasSize);
   }
 
   @override
@@ -272,7 +274,7 @@ abstract class TankFireHelper {
   BaseBullet getBullet();
 }
 
-abstract class BaseTank implements TankFireHelper {
+abstract class BaseTank extends WindowComponent implements TankFireHelper {
   BaseTank({
     required int id,
     required this.config,
@@ -383,3 +385,4 @@ abstract class BaseTank implements TankFireHelper {
   /// [t] 过渡时间-> 理论值16.66ms
   void rotateTurret(double t);
 }
+

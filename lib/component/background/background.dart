@@ -1,3 +1,4 @@
+
 /*
 * Author : LiJiqqi
 * Date : 2020/7/30
@@ -7,10 +8,9 @@ import 'dart:ui';
 
 import 'package:flame/sprite.dart';
 import 'package:tankcombat/component/base_component.dart';
-import 'package:tankcombat/game/tank_game.dart';
 import 'package:vector_math/vector_math_64.dart';
 
-class BattleBackground implements WindowComponent {
+class BattleBackground extends WindowComponent {
 
   BattleBackground() {
     init();
@@ -34,5 +34,7 @@ class BattleBackground implements WindowComponent {
   @override
   void onGameResize(Vector2 canvasSize) {
     bgRect = Rect.fromLTWH(0, 0, canvasSize.storage.first, canvasSize.storage.last);
+    super.onGameResize(canvasSize);
   }
 }
+
